@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "976559901495",
+    "project_id": "weucart-otp-generator",
+    "storage_bucket": "weucart-otp-generator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976559901495:android:99c003d9899734ae61e8b2",
+        "android_client_info": {
+          "package_name": "com.yourdomain.WeuCart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE-4HPNhT3CnxUidGdZJdp-nsEror2cW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976559901495:android:5bf904a708e838a961e8b2",
+        "android_client_info": {
+          "package_name": "com.yourdomain.weu_cart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE-4HPNhT3CnxUidGdZJdp-nsEror2cW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976559901495:android:6897c80ccacb48c161e8b2",
+        "android_client_info": {
+          "package_name": "com.yourdomain.weu_cart_seller"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE-4HPNhT3CnxUidGdZJdp-nsEror2cW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
