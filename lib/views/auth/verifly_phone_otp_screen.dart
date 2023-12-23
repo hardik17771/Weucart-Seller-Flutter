@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:weu_cart_seller/controllers/seller_controller.dart';
+import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/utils.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';

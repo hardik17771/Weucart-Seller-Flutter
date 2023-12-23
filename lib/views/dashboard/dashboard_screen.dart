@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:weu_cart_seller/core/colors.dart';
+import 'package:weu_cart_seller/views/dashboard/add_product_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/home_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/past_orders_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_analytics_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_database_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
@@ -33,12 +37,12 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
     List<Widget> pages = [
       const HomeScreen(),
-      Container(),
-      Container(),
-      Container(),
+      // const AddProductScreen(),
+      PastOrdersScreen(),
+      const ShopAnalyticsScreen(),
+      const ShopDatabaseScreen(),
     ];
 
     return Scaffold(

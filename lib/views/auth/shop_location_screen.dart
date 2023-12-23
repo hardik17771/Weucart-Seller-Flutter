@@ -4,7 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/fcm_notification_controller.dart';
-import 'package:weu_cart_seller/controllers/seller_controller.dart';
+import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';

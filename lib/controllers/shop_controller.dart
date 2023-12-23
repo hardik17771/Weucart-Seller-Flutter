@@ -4,10 +4,29 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';
+import 'package:weu_cart_seller/models/dummy_models.dart';
+import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 
 class ShopController {
+  // ----------------------------- Shop Products -------------------------->
+
+  Future<List<ProductModel>> getShopProducts({
+    required ShopModel shopModel,
+  }) async {
+    List<ProductModel> products = [];
+
+    products.add(dummmyProductModel);
+    products.add(dummmyProductModel);
+    products.add(dummmyProductModel);
+    products.add(dummmyProductModel);
+
+    return products;
+  }
+
+  // ----------------------------- Edit Product Status  ----------------->
+
   // ------------------------- User - CRUD in db ------------------------>
 
   Future<void> createShopData({
@@ -106,7 +125,7 @@ class ShopController {
       var message = jsonData["message"];
 
       if (status == "1") {
-        var dataMap = jsonData['user'].cast<Map<String, dynamic>>();
+        var dataMap = jsonData['user'];
         recievedShopModel = ShopModel.fromMap(dataMap);
 
         // save to Local Storage

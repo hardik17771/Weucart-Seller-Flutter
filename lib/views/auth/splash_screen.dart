@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -49,9 +51,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      backgroundColor: AppColors.primaryButtonColor,
       body: Center(
-        child: Text("Splash Screen"),
+        child: Image.asset("assets/icons/icon.png"),
       ),
     );
   }
