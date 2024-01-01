@@ -36,6 +36,7 @@ class OrderHistoryCard extends StatelessWidget {
                   Text(
                     "${DateFormat('dd-MM-yyyy').format(orderModel.orderDeliveryTime)} | ${orderModel.customerName}",
                     textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,

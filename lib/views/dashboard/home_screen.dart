@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weu_cart_seller/controllers/auth_controller.dart';
 import 'package:weu_cart_seller/controllers/order_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
+import 'package:weu_cart_seller/views/app_info/about_us_screen.dart';
+import 'package:weu_cart_seller/views/app_info/faq_screen.dart';
+import 'package:weu_cart_seller/views/app_info/privacy_and_policy_screen.dart';
+import 'package:weu_cart_seller/views/app_info/terms_and_condition_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/past_orders_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/widgets/live_order_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
@@ -16,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final AuthController _authController = AuthController();
   final OrderController _orderController = OrderController();
 
   @override
@@ -54,77 +63,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundImage:
-                                NetworkImage(AppConstants.defaultProfileImage),
+                      Builder(builder: (context) {
+                        return IconButton(
+                          onPressed: () => Scaffold.of(context).openDrawer(),
+                          icon: Icon(
+                            Icons.menu,
+                            size: 24,
+                            color: AppColors.blackColor.withOpacity(0.7),
                           ),
-                          const SizedBox(width: 6),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Good Morning",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                  color: AppColors.whiteColor,
-                                ),
-                              ),
-                              Text(
-                                "Seller Name",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                  color: AppColors.blackColor,
-                                ),
-                              )
-                            ],
+                        );
+                      }),
+                      const SizedBox(width: 8),
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundImage:
+                            NetworkImage(AppConstants.defaultProfileImage),
+                      ),
+                      const SizedBox(width: 6),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good Morning",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                          Text(
+                            "Seller Name",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppColors.blackColor,
+                            ),
                           )
                         ],
-                      ),
-                      GestureDetector(
-                        onTap: () async {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 2, horizontal: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: AppColors.primaryContainerColor,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.location_pin,
-                                size: 20,
-                                color: AppColors.primaryButtonColor,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "City",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                  color: AppColors.blackColor,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                            ],
-                          ),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                   const SizedBox(height: 30),
@@ -227,6 +208,429 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      drawer: Drawer(
+        child: drawerDashboard(),
+      ),
+    );
+  }
+
+  Widget drawerDashboard() {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      width: size.width,
+      height: size.height,
+      child: Column(
+        children: <Widget>[
+          colum0(),
+          const SizedBox(height: 16),
+          colum1(),
+          colum2(),
+          colum3(),
+          colum4(),
+          colum5(),
+          colum6(),
+          colum7(),
+          colum8(),
+          colum9()
+        ],
+      ),
+    );
+  }
+
+  Widget colum0() {
+    return Container(
+      margin: const EdgeInsets.only(top: 40),
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              image: const DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/icons/weucartLogo.png"),
+              ),
+              color: AppColors.whiteColor,
+              borderRadius: BorderRadius.circular(60),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Hello Seller",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 16,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    // _scaffoldKey.currentState!.closeDrawer();
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    size: 25,
+                    color: AppColors.greyColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum1() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const PastOrdersScreen();
+            },
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/usericonss.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Past Orders",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum2() {
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => MyProfileScreen(),
+        //   ),
+        // );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/usericonss.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Seller Profile",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum3() {
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ManagePaymentsScreen(),
+        //   ),
+        // );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/managepaymenticonss.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Manage Payment",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum4() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FAQScreen(),
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/faqsicon2.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "FAQ",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum5() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TermsAndConditionsScreen(),
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: Image.asset("assets/icons/termsandconditionsicons3.png"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Terms and Condition",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum6() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PrivacyAndPolicyScreen(),
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: Image.asset("assets/icons/PRICAVYANDPOLICYICONSS.png"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Privacy & Policy",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum7() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardScreen(pageIndex: 3),
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/helpandsupporticons.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "Help & Support",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget colum8() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AboutUsScreen(),
+          ),
+        );
+      },
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: SvgPicture.asset("assets/icons/helpandsupporticons.svg"),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            "About us",
+            style: GoogleFonts.poppins(
+              color: AppColors.blackColor,
+              fontSize: 15,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget colum9() {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          showLogOutDialog();
+        },
+        child: Container(
+          alignment: Alignment.topRight,
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                height: 48,
+                width: 48,
+                child: SvgPicture.asset("assets/icons/usericonss.svg"),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                "Logout",
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showLogOutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Center(
+            child: Text(
+              "Do You Want To Logout",
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+                color: AppColors.blackColor,
+              ),
+            ),
+          ),
+          content: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () async {
+                  Navigator.pop(context);
+                  // _authController.logOut(context: context);
+                },
+                child: Container(
+                  height: 36,
+                  width: 80,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: AppColors.primaryButtonColor,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Logout",
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 36,
+                  width: 80,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: AppColors.secondryButtonColor,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Cancel",
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

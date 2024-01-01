@@ -50,12 +50,15 @@ dependencies:
   shared_preferences: ^2.2.2
   http: ^1.1.0
   image_picker: ^1.0.4
-  intl: ^0.19.0
+  intl: ^0.18.0
   flutter_rating_bar: ^4.0.1
   change_app_package_name: ^1.1.0
   flutter_launcher_icons: ^0.13.1
   uuid: ^4.2.1
-  mobile_scanner: ^3.5.5
+  flutter_barcode_scanner: ^2.0.0
+  pdf: ^3.10.7
+  path_provider: ^2.1.1
+  open_document: ^1.0.7
 
 dev_dependencies:
   flutter_test:

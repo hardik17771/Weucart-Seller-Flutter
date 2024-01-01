@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/shop_controller.dart';
+import 'package:weu_cart_seller/controllers/product_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
@@ -17,7 +17,7 @@ class ShopDatabaseScreen extends StatefulWidget {
 }
 
 class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
-  final ShopController _shopController = ShopController();
+  final ProductController _productController = ProductController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,8 @@ class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
         child: Container(
           padding: const EdgeInsets.all(16),
           child: FutureBuilder(
-            future: _shopController.getShopProducts(shopModel: dummyShopModel),
+            future:
+                _productController.getShopProducts(shopModel: dummyShopModel),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<ProductModel> products = snapshot.data!;

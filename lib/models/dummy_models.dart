@@ -1,5 +1,6 @@
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/address_model.dart';
+import 'package:weu_cart_seller/models/app_info/faq_model.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
@@ -97,4 +98,11 @@ OrderModel dummyOrderModel = OrderModel(
   orderStatus: "Delivered",
   orderDeliveryTime: DateTime.now(),
   paymentMode: "Paytm",
+);
+
+FAQModel dummyFAQModel = FAQModel(
+  id: 9,
+  question: "What is our Return Policy?",
+  answer:
+      "Our return policy allows customers to request full or partial refunds for undesired items or unused in-app purchases within 30 days of purchase. Refunds are exclusive to the original payment method and will not be restocked.",
 );

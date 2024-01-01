@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40.727" height="43.974" viewBox="0 0 40.727 43.974">
+  <defs>
+    <filter id="Icon_awesome-user-tie" x="0" y="0" width="40.727" height="43.974" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Icon_awesome-user-tie)">
+    <path id="Icon_awesome-user-tie-2" data-name="Icon awesome-user-tie" d="M11.364,12.987A6.494,6.494,0,1,0,4.87,6.494,6.493,6.493,0,0,0,11.364,12.987Zm4.86,1.654L13.8,24.351l-1.623-6.9L13.8,14.61H8.929l1.623,2.841-1.623,6.9L6.5,14.641A6.806,6.806,0,0,0,0,21.429v2.11a2.436,2.436,0,0,0,2.435,2.435H20.292a2.436,2.436,0,0,0,2.435-2.435v-2.11a6.806,6.806,0,0,0-6.5-6.788Z" transform="translate(9 6)" fill="#fe9426"/>
+  </g>
+</svg>

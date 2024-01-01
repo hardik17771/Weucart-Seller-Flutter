@@ -3,7 +3,7 @@ import 'dart:convert';
 class ProductModel {
   final int product_id;
   final String name;
-  final int quantity;
+  int quantity;
   final String added_by;
   final int category_id;
   final int main_subcategory_id;
