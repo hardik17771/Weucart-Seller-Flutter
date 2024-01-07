@@ -1,42 +1,45 @@
 import 'dart:convert';
+import 'package:weu_cart_seller/models/address_model.dart';
 
 class ShopModel {
-  final int shopId;
+  final String shopId;
   final String shopUid;
-  final List<String> categoryId;
-  final String name;
-  final String ownerName;
+  final String shopName;
+  final String sellerId;
+  final String sellerUid;
+  final String sellerName;
   final String phoneNumber;
   final String emailId;
+  final String gstCode;
   final String logo;
   final String image;
-  final String address;
-  final String city;
-  final String pincode;
-  final String latitude;
-  final String longitude;
-  final String rating;
+  final List<String> categoryId;
+  final UserAddressModel addressModel;
+  final DateTime openingTime;
+  final DateTime closingTime;
   final String deliveryTime;
   final String onlineStatus;
+  final String rating;
   final String deviceToken;
   ShopModel({
     required this.shopId,
     required this.shopUid,
-    required this.categoryId,
-    required this.name,
-    required this.ownerName,
+    required this.shopName,
+    required this.sellerId,
+    required this.sellerUid,
+    required this.sellerName,
     required this.phoneNumber,
     required this.emailId,
+    required this.gstCode,
     required this.logo,
     required this.image,
-    required this.address,
-    required this.city,
-    required this.pincode,
-    required this.latitude,
-    required this.longitude,
-    required this.rating,
+    required this.categoryId,
+    required this.addressModel,
+    required this.openingTime,
+    required this.closingTime,
     required this.deliveryTime,
     required this.onlineStatus,
+    required this.rating,
     required this.deviceToken,
   });
 
@@ -44,44 +47,49 @@ class ShopModel {
     return <String, dynamic>{
       'shopId': shopId,
       'shopUid': shopUid,
-      'categoryId': categoryId,
-      'name': name,
-      'ownerName': ownerName,
+      'shopName': shopName,
+      'sellerId': sellerId,
+      'sellerUid': sellerUid,
+      'sellerName': sellerName,
       'phoneNumber': phoneNumber,
       'emailId': emailId,
+      'gstCode': gstCode,
       'logo': logo,
       'image': image,
-      'address': address,
-      'city': city,
-      'pincode': pincode,
-      'latitude': latitude,
-      'longitude': longitude,
-      'rating': rating,
+      'categoryId': categoryId,
+      'addressModel': addressModel.toMap(),
+      'openingTime': openingTime.millisecondsSinceEpoch,
+      'closingTime': closingTime.millisecondsSinceEpoch,
       'deliveryTime': deliveryTime,
       'onlineStatus': onlineStatus,
+      'rating': rating,
       'deviceToken': deviceToken,
     };
   }
 
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
-      shopId: map['shopId'] as int,
+      shopId: map['shopId'] as String,
       shopUid: map['shopUid'] as String,
-      categoryId: List<String>.from((map['categoryId'] as List<dynamic>)),
-      name: map['name'] as String,
-      ownerName: map['ownerName'] as String,
+      shopName: map['shopName'] as String,
+      sellerId: map['sellerId'] as String,
+      sellerUid: map['sellerUid'] as String,
+      sellerName: map['sellerName'] as String,
       phoneNumber: map['phoneNumber'] as String,
       emailId: map['emailId'] as String,
+      gstCode: map['gstCode'] as String,
       logo: map['logo'] as String,
       image: map['image'] as String,
-      address: map['address'] as String,
-      city: map['city'] as String,
-      pincode: map['pincode'] as String,
-      latitude: map['latitude'] as String,
-      longitude: map['longitude'] as String,
-      rating: map['rating'] as String,
+      categoryId: List<String>.from((map['categoryId'] as List<String>)),
+      addressModel:
+          UserAddressModel.fromMap(map['addressModel'] as Map<String, dynamic>),
+      openingTime:
+          DateTime.fromMillisecondsSinceEpoch(map['openingTime'] as int),
+      closingTime:
+          DateTime.fromMillisecondsSinceEpoch(map['closingTime'] as int),
       deliveryTime: map['deliveryTime'] as String,
       onlineStatus: map['onlineStatus'] as String,
+      rating: map['rating'] as String,
       deviceToken: map['deviceToken'] as String,
     );
   }

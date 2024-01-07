@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/order_product_card.dart';
+import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_product_card.dart';
 
 class LiveOrderCard extends StatefulWidget {
   final OrderModel orderModel;
@@ -133,7 +133,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                         scrollDirection: Axis.vertical,
                         itemCount: widget.orderModel.products.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return OrderProductCard(
+                          return LiveOrderProductCard(
                             productModel: widget.orderModel.products[index],
                           );
                         },

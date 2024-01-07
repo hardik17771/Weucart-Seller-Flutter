@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/auth_controller.dart';
-import 'package:weu_cart_seller/controllers/order_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
@@ -12,8 +12,8 @@ import 'package:weu_cart_seller/views/app_info/faq_screen.dart';
 import 'package:weu_cart_seller/views/app_info/privacy_and_policy_screen.dart';
 import 'package:weu_cart_seller/views/app_info/terms_and_condition_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/past_orders_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/live_order_card.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_analytics/past_orders_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class HomeScreen extends StatefulWidget {

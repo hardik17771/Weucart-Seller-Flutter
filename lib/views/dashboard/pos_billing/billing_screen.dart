@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/pdf_invoice_controller.dart';
+import 'package:open_document/open_document.dart';
+import 'package:weu_cart_seller/controllers/dashboard/pdf_invoice_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
-import 'package:weu_cart_seller/views/pos_billing/widgets/billing_product_card.dart';
+import 'package:weu_cart_seller/views/dashboard/pos_billing/widgets/billing_product_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
+import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class OfflineOrderBillingPage extends StatefulWidget {
   final List<ProductModel> products;
@@ -37,6 +39,21 @@ class _OfflineOrderBillingPageState extends State<OfflineOrderBillingPage> {
       totalAmount +=
           widget.products[i].unit_price * widget.products[i].quantity;
     }
+  }
+
+  Future<void> openPdfFile({required String filePath}) async {
+    await OpenDocument.openDocument(filePath: filePath);
+  }
+
+  Future<void> sharePdfFileOnWhatsapp({
+    required String phoneNumber,
+    required String filePath,
+  }) async {
+    await WhatsappShare.shareFile(
+      text: 'Weucart Order Invoice',
+      phone: phoneNumber,
+      filePath: [filePath],
+    );
   }
 
   @override
@@ -322,11 +339,20 @@ class _OfflineOrderBillingPageState extends State<OfflineOrderBillingPage> {
                       customerPhone: _customerPhoneNumberController.text.trim(),
                       products: widget.products,
                     );
-                    pdfInvoiceController.savePdfFile(
+                    String filePath = await pdfInvoiceController.savePdfFile(
                       fileName:
                           "invoice_${_customerPhoneNumberController.text.trim()}",
                       byteList: data,
                     );
+
+                    // Open
+                    openPdfFile(filePath: filePath);
+
+                    // Share
+                    // sharePdfFileOnWhatsapp(
+                    //   phoneNumber: _customerPhoneNumberController.text.trim(),
+                    //   filePath: filePath,
+                    // );
                   }
                 },
               ),

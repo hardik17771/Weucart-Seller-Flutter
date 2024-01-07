@@ -3,30 +3,45 @@ import 'package:weu_cart_seller/models/address_model.dart';
 import 'package:weu_cart_seller/models/app_info/faq_model.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/seller_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 
+SellerModel dummySellerModel = SellerModel(
+  sellerId: "9",
+  sellerUid: "selleruid",
+  name: 'Ram Vyas',
+  email: "g@gmail.com",
+  phoneNumber: "9898989898",
+  profileImage: AppConstants.defaultProfileImage,
+  shops: [
+    dummyShopModel.shopId,
+    dummyShopModel.shopId,
+  ],
+);
+
 ShopModel dummyShopModel = ShopModel(
-  shopId: 9,
+  shopId: "9",
   shopUid: "shopUid",
-  categoryId: ["1", "2"],
-  name: "GJ Store",
-  ownerName: "GJ",
+  shopName: "GJ Store",
+  sellerId: "9",
+  sellerUid: "sellerUid",
+  sellerName: "GJ",
   phoneNumber: "9999999999",
   emailId: "gj@gmail.com",
+  gstCode: "GST Code",
   logo: AppConstants.defaultLogoImage,
   image: AppConstants.defaultShopImage,
-  address: "address",
-  city: "city",
-  pincode: "pincode",
-  latitude: "45",
-  longitude: "32",
+  categoryId: ["1", "2"],
+  addressModel: dummyAddressModel,
   rating: "4.3",
+  openingTime: DateTime.now(),
+  closingTime: DateTime.now(),
   deliveryTime: "60 Mins",
   onlineStatus: "Online",
   deviceToken: "deviceToken",
 );
 
-UserAddressModel dummyUserAddressModel = UserAddressModel(
+UserAddressModel dummyAddressModel = UserAddressModel(
   latitude: "56.5",
   longitude: "54.4",
   address: "Kalani Nagar, Indore",
@@ -88,7 +103,7 @@ ProductModel dummmyProductModel = ProductModel(
 
 OrderModel dummyOrderModel = OrderModel(
   customerName: "Gautam Jain",
-  customerAddressModel: dummyUserAddressModel,
+  customerAddressModel: dummyAddressModel,
   customerPhone: "+919640414912",
   orderAmount: "897",
   products: [

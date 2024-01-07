@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/order_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/live_order_card.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/past_order_card.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_analytics/widgets/past_order_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class PastOrdersScreen extends StatefulWidget {

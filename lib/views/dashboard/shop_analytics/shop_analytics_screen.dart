@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/order_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/order_history_card.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_analytics/widgets/order_history_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class ShopAnalyticsScreen extends StatefulWidget {
@@ -79,7 +79,7 @@ class _ShopAnalyticsScreenState extends State<ShopAnalyticsScreen> {
                       ),
                     ),
                     Text(
-                      dummyShopModel.name,
+                      dummyShopModel.shopName,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500,
                         fontSize: 10,

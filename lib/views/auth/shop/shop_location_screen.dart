@@ -1,32 +1,37 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/fcm_notification_controller.dart';
-import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';
+import 'package:weu_cart_seller/models/address_model.dart';
+import 'package:weu_cart_seller/models/seller_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class ShopLocationScreen extends StatefulWidget {
-  final User user;
-  final String name;
-  final String ownerName;
+  final SellerModel sellerModel;
+  final String shopName;
   final String emailId;
-  final int shopId;
-  final List<String> categoryId;
+  final String phoneNumber;
+  final String gstCode;
+  final List<String> categories;
+  final DateTime shopOpeningTime;
+  final DateTime shopClosingTime;
   const ShopLocationScreen({
     super.key,
-    required this.user,
-    required this.name,
-    required this.ownerName,
+    required this.sellerModel,
+    required this.shopName,
     required this.emailId,
-    required this.shopId,
-    required this.categoryId,
+    required this.phoneNumber,
+    required this.gstCode,
+    required this.categories,
+    required this.shopOpeningTime,
+    required this.shopClosingTime,
   });
 
   @override
@@ -43,7 +48,6 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
   final TextEditingController _currentCityController = TextEditingController();
   final TextEditingController _currentPincodeController =
       TextEditingController();
-  final ShopController _shopController = ShopController();
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -108,7 +112,9 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
       });
     }).catchError((e) {
       debugPrint(e);
-      _isLocationLoading = false;
+      setState(() {
+        _isLocationLoading = false;
+      });
       showCustomDialog(
         context: context,
         title: "Location Error",
@@ -155,28 +161,47 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
       backgroundColor: AppColors.primaryScaffoldColor,
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 0,
+        centerTitle: true,
         backgroundColor: AppColors.primaryAppBarColor,
+        title: Text(
+          "Shop Location",
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: AppColors.primaryButtonColor,
+          ),
+        ),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: SvgPicture.asset(
+              "assets/images/back_button_icon.svg",
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Container(
             width: size.width,
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 36),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Enter your Location',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.blackColor,
-                    fontSize: 24,
-                  ),
-                ),
-                const SizedBox(height: 24),
+                // Text(
+                //   'Enter your Location',
+                //   textAlign: TextAlign.center,
+                //   style: GoogleFonts.poppins(
+                //     fontWeight: FontWeight.w500,
+                //     color: AppColors.blackColor,
+                //     fontSize: 20,
+                //   ),
+                // ),
+                // const SizedBox(height: 24),
                 (_isLocationLoading == true)
                     ? SizedBox(
                         width: size.width,
@@ -186,11 +211,12 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                     : CustomButton(
                         text: "Get Live Location",
                         bgColor: AppColors.primaryButtonColor,
-                        textColor: Colors.black,
+                        textColor: AppColors.whiteColor,
                         onPress: () {
                           setState(() {
                             _isLocationLoading = true;
                           });
+
                           _getCurrentPosition();
 
                           setState(() {
@@ -226,7 +252,7 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25)),
                             ),
-                            contentPadding: const EdgeInsets.all(12.0),
+                            contentPadding: const EdgeInsets.all(16.0),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -252,7 +278,7 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25)),
                             ),
-                            contentPadding: const EdgeInsets.all(12.0),
+                            contentPadding: const EdgeInsets.all(16.0),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -278,7 +304,7 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25)),
                             ),
-                            contentPadding: const EdgeInsets.all(12.0),
+                            contentPadding: const EdgeInsets.all(16.0),
                           ),
                         ),
                       ],
@@ -299,7 +325,7 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                 child: const CustomLoader(),
               )
             : CustomButton(
-                text: "Save",
+                text: "Add Shop",
                 bgColor: AppColors.primaryButtonColor,
                 textColor: AppColors.whiteColor,
                 onPress: () async {
@@ -309,36 +335,45 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                         _isDataLoading = true;
                       });
 
-                      // save to db
+                      debugPrint("Shop Created");
+
                       String deviceToken =
                           await FCMNotificationController().getDeviceToken();
 
-                      ShopModel shopModel = ShopModel(
-                        shopId: widget.shopId,
-                        shopUid: widget.user.uid,
-                        categoryId: widget.categoryId,
-                        name: widget.name,
-                        ownerName: widget.ownerName,
-                        phoneNumber: widget.user.phoneNumber!,
-                        emailId: widget.emailId,
-                        logo: AppConstants.defaultLogoImage,
-                        image: AppConstants.defaultProfileImage,
-                        address: _currentAddressController.text.trim(),
-                        city: _currentCityController.text.trim(),
-                        pincode: _currentPincodeController.text.trim(),
+                      UserAddressModel addressModel = UserAddressModel(
                         latitude: _currentPosition!.latitude.toString(),
                         longitude: _currentPosition!.longitude.toString(),
-                        rating: "0",
-                        deliveryTime: "60 minutes",
-                        onlineStatus: "online",
+                        address: _currentAddressController.text.trim(),
+                        city: _currentCityController.text.trim(),
+                        state: "State",
+                        country: "India",
+                        pincode: _currentPincodeController.text.trim(),
+                        id: "9",
+                      );
+
+                      ShopModel shopModel = ShopModel(
+                        shopId: "9",
+                        shopUid: "9",
+                        shopName: widget.shopName,
+                        sellerId: widget.sellerModel.sellerId,
+                        sellerUid: widget.sellerModel.sellerUid,
+                        sellerName: widget.sellerModel.name,
+                        phoneNumber: widget.phoneNumber,
+                        emailId: widget.emailId,
+                        gstCode: widget.emailId,
+                        logo: AppConstants.defaultLogoImage,
+                        image: AppConstants.defaultShopImage,
+                        categoryId: widget.categories,
+                        addressModel: addressModel,
+                        openingTime: widget.shopOpeningTime,
+                        closingTime: widget.shopClosingTime,
+                        deliveryTime: "60 Mins",
+                        onlineStatus: "Online",
+                        rating: "5",
                         deviceToken: deviceToken,
                       );
 
-                      // ignore: use_build_context_synchronously
-                      _shopController.createShopData(
-                        shopModel: shopModel,
-                        context: context,
-                      );
+                      // API Calls & Pop to SellerShopDashboard
 
                       setState(() {
                         _isDataLoading = false;

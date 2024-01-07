@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
+import 'package:weu_cart_seller/views/auth/seller/login_phone_otp_screen.dart';
+import 'package:weu_cart_seller/views/auth/shop/seller_shop_dashboard_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,41 +13,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final SellerController _sellerController = SellerController();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () async {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) {
-            return const DashboardScreen(pageIndex: 0);
-          },
-        ),
-        (route) => false,
-      );
-
       /// -------------------------- State Persistence ---------------------------->
 
-      // bool userExists = await _userController.checkLocalUserDataExistence();
-      // if (userExists == true) {
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return DashboardScreen(pageIndex: 0);
-      //       },
-      //     ),
-      //     (route) => false,
-      //   );
-      // } else {
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return LoginPhoneOTPScreen();
-      //       },
-      //     ),
-      //     (route) => false,
-      //   );
-      // }
+      bool sellerExists =
+          await _sellerController.checkLocalSellerDataExistence();
+      if (sellerExists == true) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) {
+              return const SellerShopDashboardScreen();
+            },
+          ),
+          (route) => false,
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) {
+              return const LoginPhoneOTPScreen();
+            },
+          ),
+          (route) => false,
+        );
+      }
     });
   }
 

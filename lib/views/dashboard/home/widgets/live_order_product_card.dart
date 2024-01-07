@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 
-class OrderProductCard extends StatelessWidget {
+class LiveOrderProductCard extends StatelessWidget {
   final ProductModel productModel;
-  const OrderProductCard({
+  const LiveOrderProductCard({
     super.key,
     required this.productModel,
   });

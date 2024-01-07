@@ -1,14 +1,9 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 
@@ -79,7 +74,7 @@ class PdfInvoiceController {
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
                           pw.Text(
-                            shopModel.name,
+                            shopModel.shopName,
                             style: const pw.TextStyle(
                               fontSize: 20,
                             ),
@@ -98,7 +93,7 @@ class PdfInvoiceController {
                     mainAxisAlignment: pw.MainAxisAlignment.start,
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      pw.Text(shopModel.address),
+                      pw.Text(shopModel.addressModel.address),
                       pw.Text(shopModel.phoneNumber),
                       pw.Text("GST No. xxxxxxxxx"),
                     ],
@@ -135,7 +130,7 @@ class PdfInvoiceController {
               ),
               pw.SizedBox(height: 50),
               pw.Text(
-                "Dear Customer, thanks for buying at ${shopModel.name}, feel free to see the list of items below.",
+                "Dear Customer, thanks for buying at ${shopModel.shopName}, feel free to see the list of items below.",
                 textAlign: pw.TextAlign.start,
               ),
               pw.SizedBox(height: 24),
@@ -152,7 +147,7 @@ class PdfInvoiceController {
               ),
               pw.SizedBox(height: 4),
               pw.Text(
-                shopModel.ownerName,
+                shopModel.sellerName,
                 textAlign: pw.TextAlign.start,
               )
             ],
@@ -190,7 +185,7 @@ class PdfInvoiceController {
     );
   }
 
-  Future<void> savePdfFile({
+  Future<String> savePdfFile({
     required String fileName,
     required Uint8List byteList,
   }) async {
@@ -200,7 +195,7 @@ class PdfInvoiceController {
 
     await file.writeAsBytes(byteList);
 
-    await OpenDocument.openDocument(filePath: filePath);
+    return filePath;
   }
 
   String getSubTotal(List<ProductModel> products) {

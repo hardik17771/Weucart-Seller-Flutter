@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/product_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
-import 'package:weu_cart_seller/views/dashboard/add_product_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/widgets/shop_product_card.dart';
+import 'package:weu_cart_seller/views/dashboard/add_product/add_product_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_database/widgets/shop_product_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
