@@ -3,7 +3,6 @@ import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/views/auth/seller/login_phone_otp_screen.dart';
 import 'package:weu_cart_seller/views/auth/shop/seller_shop_dashboard_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -49,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.primaryButtonColor,
       body: Container(
@@ -61,7 +61,10 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         child: Center(
-          child: Image.asset("assets/icons/icon.png"),
+          child: SizedBox(
+            width: size.width / 2,
+            child: Image.asset("assets/icons/weucartLogo.png"),
+          ),
         ),
       ),
     );

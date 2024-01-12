@@ -80,7 +80,7 @@ class ShopModel {
       gstCode: map['gstCode'] as String,
       logo: map['logo'] as String,
       image: map['image'] as String,
-      categoryId: List<String>.from((map['categoryId'] as List<String>)),
+      categoryId: List<String>.from((map['categoryId'] as List<dynamic>)),
       addressModel:
           UserAddressModel.fromMap(map['addressModel'] as Map<String, dynamic>),
       openingTime:

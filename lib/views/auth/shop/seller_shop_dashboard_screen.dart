@@ -3,10 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
+import 'package:weu_cart_seller/core/utils.dart';
 import 'package:weu_cart_seller/models/seller_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/auth/shop/add_shop_screen.dart';
 import 'package:weu_cart_seller/views/auth/shop/widgets/seller_shop_card.dart';
+import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
@@ -21,6 +23,7 @@ class SellerShopDashboardScreen extends StatefulWidget {
 class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
   final SellerController _sellerController = SellerController();
   final ShopController _shopController = ShopController();
+  ShopModel? selectedShopModel;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,6 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
               if (snapshot.hasData) {
                 SellerModel sellerModel = snapshot.data!;
                 List<String> shopIds = sellerModel.shops;
-
                 return Column(
                   children: [
                     if (shopIds.isNotEmpty)
@@ -79,10 +81,37 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
                                     AsyncSnapshot snapshot) {
                                   if (snapshot.hasData) {
                                     ShopModel shopModel = snapshot.data;
-                                    return Container(
-                                      margin: const EdgeInsets.only(bottom: 16),
-                                      child: SellerShopCard(
-                                        shopModel: shopModel,
+                                    return InkWell(
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 16),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              AppColors.primaryContainerColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: (shopModel !=
+                                                  selectedShopModel)
+                                              ? Border.all(
+                                                  width: 0,
+                                                  color: AppColors
+                                                      .primaryContainerColor,
+                                                )
+                                              : Border.all(
+                                                  width: 1.5,
+                                                  color: AppColors.greyColor,
+                                                ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedShopModel = shopModel;
+                                            });
+                                          },
+                                          child: SellerShopCard(
+                                            shopModel: shopModel,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   } else {
@@ -119,6 +148,36 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
               }
             },
           ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        padding: const EdgeInsets.all(16),
+        child: CustomButton(
+          text: "Continue",
+          bgColor: AppColors.primaryButtonColor,
+          textColor: AppColors.whiteColor,
+          onPress: () async {
+            if (selectedShopModel != null) {
+              await _shopController.saveLocalShopData(
+                  shopModel: selectedShopModel!);
+
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const DashboardScreen(pageIndex: 0);
+                  },
+                ),
+                (route) => false,
+              );
+            } else {
+              showSnackBar(
+                context: context,
+                text: "Select a shop to continue",
+              );
+            }
+          },
         ),
       ),
     );
