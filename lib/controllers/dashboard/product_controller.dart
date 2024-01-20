@@ -17,9 +17,21 @@ class ProductController {
     return products;
   }
 
-  Future<ProductModel?> getProductByID({
+  Future<ProductModel?> getShopProductByISBN({
     required BuildContext context,
-    required String productId,
+    required String productISBN,
+  }) async {
+    ProductModel? productModel;
+
+    // To be changed to API Call for searching products in this shop
+    productModel = dummmyProductModel;
+
+    return productModel;
+  }
+
+  Future<ProductModel?> getProductByISBN({
+    required BuildContext context,
+    required String productISBN,
   }) async {
     ProductModel? productModel;
 
@@ -27,5 +39,17 @@ class ProductController {
     productModel = dummmyProductModel;
 
     return productModel;
+  }
+
+  Future<List<ProductModel>> searchProductByName({
+    required BuildContext context,
+    required String query,
+  }) async {
+    List<ProductModel> products = [];
+
+    products.add(dummmyProductModel);
+    products.add(dummmyProductModel);
+
+    return products;
   }
 }

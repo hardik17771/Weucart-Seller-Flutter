@@ -69,17 +69,17 @@ class _QrScanningScreenState extends State<QrScanningScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: SvgPicture.asset(
-              "assets/images/back_button_icon.svg",
-            ),
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //   },
+        //   child: Container(
+        //     margin: const EdgeInsets.only(top: 8),
+        //     child: SvgPicture.asset(
+        //       "assets/images/back_button_icon.svg",
+        //     ),
+        //   ),
+        // ),
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
@@ -99,9 +99,9 @@ class _QrScanningScreenState extends State<QrScanningScreen> {
 
                     ProductModel? productModel =
                         // ignore: use_build_context_synchronously
-                        await _productController.getProductByID(
+                        await _productController.getShopProductByISBN(
                       context: context,
-                      productId: result,
+                      productISBN: result,
                     );
 
                     if (productModel != null) {

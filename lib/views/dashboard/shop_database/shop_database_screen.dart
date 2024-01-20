@@ -7,6 +7,7 @@ import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/dashboard/add_product/add_product_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_database/widgets/product_edit_dialog.dart';
 import 'package:weu_cart_seller/views/dashboard/shop_database/widgets/shop_product_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
@@ -97,7 +98,21 @@ class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return Column(
                               children: [
-                                ShopProductCard(productModel: products[index]),
+                                InkWell(
+                                  onTap: () {
+                                    showEditProductDialog(
+                                        context: context,
+                                        productName: products[index].name,
+                                        productQuantity:
+                                            products[index].quantity.toString(),
+                                        productUnitPrice: products[index]
+                                            .unit_price
+                                            .toString());
+                                  },
+                                  child: ShopProductCard(
+                                    productModel: products[index],
+                                  ),
+                                ),
                                 const SizedBox(height: 16),
                               ],
                             );

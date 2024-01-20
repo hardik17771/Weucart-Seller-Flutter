@@ -4,7 +4,6 @@ import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/views/dashboard/pos_billing/qr_scanning_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/add_product/add_product_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/home/home_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/shop_analytics/past_orders_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/shop_analytics/shop_analytics_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/shop_database/shop_database_screen.dart';
 
@@ -40,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   Widget build(BuildContext context) {
     List<Widget> pages = [
       const HomeScreen(),
-      // const AddProductScreen(),
+      const AddProductScreen(),
       const QrScanningScreen(),
       const ShopAnalyticsScreen(),
       const ShopDatabaseScreen(),
@@ -87,6 +86,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                 BottomNavigationBarItem(
                   icon: Icon(Icons.add_box_outlined),
                   label: "Add",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.qr_code),
+                  label: "POS",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.analytics_outlined),
