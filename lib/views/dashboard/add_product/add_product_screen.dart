@@ -1,3 +1,4 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:weu_cart_seller/core/utils.dart';
 import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
+import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -23,18 +25,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _productISBNController = TextEditingController();
 
   // New Product
+  ProductModel? weucartProductModel;
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _productQuantityController =
       TextEditingController();
   final TextEditingController _productPriceController = TextEditingController();
 
-  late bool _showProductFillingDetails;
-  ProductModel? weucartProductModel;
+  late String _azureSearchProductName;
   AzureProductModel? azureProductModel;
+
+  late bool _showProductFillingDetails;
 
   @override
   void initState() {
     super.initState();
+    _azureSearchProductName = "";
     _showProductFillingDetails = false;
   }
 
@@ -148,7 +153,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
               InkWell(
                 onTap: () async {
                   setState(() {
+                    // Reseting
                     _showProductFillingDetails = false;
+                    weucartProductModel = null;
+
                     _productNameController.text = "";
                     _productQuantityController.text = "";
                     _productPriceController.text = "";
@@ -167,11 +175,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         weucartProductModel = productModel;
 
                         _productNameController.text = productModel.name;
-
-                        // Load -> productName here
                       });
                     } else {
-                      // Search Product by name in Azure Product Data db
+                      // Search Product by name in Azure Product Data d
+                      setState(() {
+                        _productNameController.text = "Null";
+                      });
                     }
 
                     setState(() {
@@ -230,36 +239,60 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 12),
-                            TextFormField(
-                              readOnly: true,
-                              controller: _productNameController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter your product name';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.whiteColor,
-                                errorStyle: GoogleFonts.poppins(fontSize: 10),
-                                labelText: 'Product Name *',
-                                labelStyle: GoogleFonts.poppins(
-                                  color: AppColors.blackColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.primaryContainerColor,
-                                    width: 10,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(15)),
-                                ),
-                                contentPadding: const EdgeInsets.all(12.0),
-                              ),
-                            ),
+                            (weucartProductModel != null)
+                                ? TextFormField(
+                                    readOnly: true,
+                                    controller: _productNameController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Enter your product name';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: AppColors.whiteColor,
+                                      errorStyle:
+                                          GoogleFonts.poppins(fontSize: 10),
+                                      labelText: 'Product Name *',
+                                      labelStyle: GoogleFonts.poppins(
+                                        color: AppColors.blackColor,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color:
+                                              AppColors.primaryContainerColor,
+                                          width: 10,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.all(12.0),
+                                    ),
+                                  )
+                                : FutureBuilder<List<AzureProductModel>>(
+                                    future: null,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        List<AzureProductModel>
+                                            suggestedProducts = snapshot.data!;
+                                        return EasySearchBar(
+                                          title:
+                                              const Text('Enter product name'),
+                                          onSearch: (value) => setState(
+                                            () {
+                                              _azureSearchProductName = value;
+                                            },
+                                          ),
+                                          suggestions: [],
+                                        );
+                                      } else {
+                                        return const CustomLoader();
+                                      }
+                                    }),
                             const SizedBox(height: 12),
                             TextFormField(
                               controller: _productQuantityController,

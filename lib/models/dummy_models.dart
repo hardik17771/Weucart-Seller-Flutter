@@ -1,45 +1,43 @@
-import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/address_model.dart';
 import 'package:weu_cart_seller/models/app_info/faq_model.dart';
+import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
-import 'package:weu_cart_seller/models/seller_model.dart';
-import 'package:weu_cart_seller/models/shop_model.dart';
 
-SellerModel dummySellerModel = SellerModel(
-  sellerId: "9",
-  sellerUid: "selleruid",
-  name: 'Ram Vyas',
-  email: "g@gmail.com",
-  phoneNumber: "9898989898",
-  profileImage: AppConstants.defaultProfileImage,
-  shops: [
-    dummyShopModel.shopId,
-    dummyShopModel.shopId,
-  ],
-);
+// SellerModel dummySellerModel = SellerModel(
+//   sellerId: "9",
+//   sellerUid: "selleruid",
+//   name: 'Ram Vyas',
+//   email: "g@gmail.com",
+//   phoneNumber: "9898989898",
+//   profileImage: AppConstants.defaultProfileImage,
+//   shops: [
+//     dummyShopModel.shopId,
+//     dummyShopModel.shopId,
+//   ],
+// );
 
-ShopModel dummyShopModel = ShopModel(
-  shopId: "9",
-  shopUid: "shopUid",
-  shopName: "GJ Store",
-  sellerId: "9",
-  sellerUid: "sellerUid",
-  sellerName: "GJ",
-  phoneNumber: "9999999999",
-  emailId: "gj@gmail.com",
-  gstCode: "GST Code",
-  logo: AppConstants.defaultLogoImage,
-  image: AppConstants.defaultShopImage,
-  categoryId: ["1", "2"],
-  addressModel: dummyAddressModel,
-  rating: "4.3",
-  openingTime: DateTime.now(),
-  closingTime: DateTime.now(),
-  deliveryTime: "60 Mins",
-  onlineStatus: "Online",
-  deviceToken: "deviceToken",
-);
+// ShopModel dummyShopModel = ShopModel(
+//   shopId: "9",
+//   shopUid: "shopUid",
+//   shopName: "GJ Store",
+//   sellerId: "9",
+//   sellerUid: "sellerUid",
+//   sellerName: "GJ",
+//   phoneNumber: "9999999999",
+//   emailId: "gj@gmail.com",
+//   gstCode: "GST Code",
+//   logo: AppConstants.defaultLogoImage,
+//   image: AppConstants.defaultShopImage,
+//   categoryId: ["1", "2"],
+//   addressModel: dummyAddressModel,
+//   rating: "4.3",
+//   openingTime: DateTime.now(),
+//   closingTime: DateTime.now(),
+//   deliveryTime: "60 Mins",
+//   onlineStatus: "Online",
+//   deviceToken: "deviceToken",
+// );
 
 UserAddressModel dummyAddressModel = UserAddressModel(
   latitude: "56.5",
@@ -99,6 +97,20 @@ ProductModel dummmyProductModel = ProductModel(
   pdf: "",
   slug: "",
   rating: 4,
+);
+
+AzureProductModel dummyAzureProductModel = AzureProductModel(
+  indexx: 53,
+  product: "Acne & Oil Control Face Wash",
+  category: "Beauty & Hygiene",
+  sub_category: "Men's Grooming",
+  brand: "Red Hunt",
+  sale_price: 80,
+  market_price: 100,
+  typee: "Face & Body",
+  rating: 4,
+  descriptionn:
+      "Natural mineral kaolin deep cleans removes dirt, pollution and bacteria. Added sliver resists the impact and spread of acne causing bacteria",
 );
 
 OrderModel dummyOrderModel = OrderModel(

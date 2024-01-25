@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
+import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 
 class SellerShopCard extends StatelessWidget {
@@ -46,7 +47,7 @@ class SellerShopCard extends StatelessWidget {
                 bottomRight: Radius.elliptical(12, 52.0),
               ),
             ),
-            child: Image.network(shopModel.image),
+            child: Image.network(AppConstants.defaultShopImage),
           ),
           const SizedBox(width: 8),
           Flexible(
@@ -56,7 +57,7 @@ class SellerShopCard extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    shopModel.shopName,
+                    shopModel.name,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 13,
@@ -67,7 +68,7 @@ class SellerShopCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(
-                    "${shopModel.addressModel.address}, ${shopModel.addressModel.city}",
+                    "${shopModel.address}, ${shopModel.city}",
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 7,
@@ -105,7 +106,7 @@ class SellerShopCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      "GST No. ${shopModel.gstCode}",
+                      "GST No. ${shopModel.gst_code}",
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontSize: 7,

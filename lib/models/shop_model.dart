@@ -1,96 +1,172 @@
 import 'dart:convert';
-import 'package:weu_cart_seller/models/address_model.dart';
 
 class ShopModel {
-  final String shopId;
-  final String shopUid;
-  final String shopName;
-  final String sellerId;
+  final int seller_id;
   final String sellerUid;
-  final String sellerName;
-  final String phoneNumber;
-  final String emailId;
-  final String gstCode;
-  final String logo;
-  final String image;
-  final List<String> categoryId;
-  final UserAddressModel addressModel;
-  final DateTime openingTime;
-  final DateTime closingTime;
-  final String deliveryTime;
-  final String onlineStatus;
-  final String rating;
+  final String manager_phone;
+  final int shop_id;
+  final String name;
+  final String email;
+  final List<String> shop_images;
+
+  final String latitude;
+  final String longitude;
+  final String country;
+  final String state;
+  final String city;
+  final String address;
+  final String pincode;
+
+  final List<Map<String, dynamic>> products;
+  final String gst_code;
+  final int serving_radius;
+  final String status;
+  final int rating;
   final String deviceToken;
+  final List<String> reviews;
+  final DateTime opening_time;
+  final DateTime closing_time;
+  final List<Map<String, dynamic>> categories_list;
+  final bool is_delivery_boy;
+
+  final String logo;
+  final String facebook;
+  final String google;
+  final String twitter;
+  final String youtube;
+  final String instagram;
+
+  String? id;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
   ShopModel({
-    required this.shopId,
-    required this.shopUid,
-    required this.shopName,
-    required this.sellerId,
+    required this.seller_id,
     required this.sellerUid,
-    required this.sellerName,
-    required this.phoneNumber,
-    required this.emailId,
-    required this.gstCode,
-    required this.logo,
-    required this.image,
-    required this.categoryId,
-    required this.addressModel,
-    required this.openingTime,
-    required this.closingTime,
-    required this.deliveryTime,
-    required this.onlineStatus,
+    required this.manager_phone,
+    required this.shop_id,
+    required this.name,
+    required this.email,
+    required this.shop_images,
+    required this.latitude,
+    required this.longitude,
+    required this.country,
+    required this.state,
+    required this.city,
+    required this.address,
+    required this.pincode,
+    required this.products,
+    required this.gst_code,
+    required this.serving_radius,
+    required this.status,
     required this.rating,
     required this.deviceToken,
+    required this.reviews,
+    required this.opening_time,
+    required this.closing_time,
+    required this.categories_list,
+    required this.is_delivery_boy,
+    required this.logo,
+    required this.facebook,
+    required this.google,
+    required this.twitter,
+    required this.youtube,
+    required this.instagram,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'shopId': shopId,
-      'shopUid': shopUid,
-      'shopName': shopName,
-      'sellerId': sellerId,
+      'seller_id': seller_id,
       'sellerUid': sellerUid,
-      'sellerName': sellerName,
-      'phoneNumber': phoneNumber,
-      'emailId': emailId,
-      'gstCode': gstCode,
-      'logo': logo,
-      'image': image,
-      'categoryId': categoryId,
-      'addressModel': addressModel.toMap(),
-      'openingTime': openingTime.millisecondsSinceEpoch,
-      'closingTime': closingTime.millisecondsSinceEpoch,
-      'deliveryTime': deliveryTime,
-      'onlineStatus': onlineStatus,
+      'manager_phone': manager_phone,
+      'shop_id': shop_id,
+      'name': name,
+      'email': email,
+      'shop_images': shop_images,
+      'latitude': latitude,
+      'longitude': longitude,
+      'country': country,
+      'state': state,
+      'city': city,
+      'address': address,
+      'pincode': pincode,
+      'products': products,
+      'gst_code': gst_code,
+      'serving_radius': serving_radius,
+      'status': status,
       'rating': rating,
       'deviceToken': deviceToken,
+      'reviews': reviews,
+      'opening_time': opening_time.toIso8601String(),
+      'closing_time': closing_time.toIso8601String(),
+      'categories_list': categories_list,
+      'is_delivery_boy': is_delivery_boy,
+      'logo': logo,
+      'facebook': facebook,
+      'google': google,
+      'twitter': twitter,
+      'youtube': youtube,
+      'instagram': instagram,
+      '_id': id,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      '__v': v,
     };
   }
 
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
-      shopId: map['shopId'] as String,
-      shopUid: map['shopUid'] as String,
-      shopName: map['shopName'] as String,
-      sellerId: map['sellerId'] as String,
+      seller_id: map['seller_id'] as int,
       sellerUid: map['sellerUid'] as String,
-      sellerName: map['sellerName'] as String,
-      phoneNumber: map['phoneNumber'] as String,
-      emailId: map['emailId'] as String,
-      gstCode: map['gstCode'] as String,
-      logo: map['logo'] as String,
-      image: map['image'] as String,
-      categoryId: List<String>.from((map['categoryId'] as List<dynamic>)),
-      addressModel:
-          UserAddressModel.fromMap(map['addressModel'] as Map<String, dynamic>),
-      openingTime:
-          DateTime.fromMillisecondsSinceEpoch(map['openingTime'] as int),
-      closingTime:
-          DateTime.fromMillisecondsSinceEpoch(map['closingTime'] as int),
-      deliveryTime: map['deliveryTime'] as String,
-      onlineStatus: map['onlineStatus'] as String,
-      rating: map['rating'] as String,
+      manager_phone: map['manager_phone'] as String,
+      shop_id: map['shop_id'] as int,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      shop_images: List<String>.from((map['shop_images'] as List<dynamic>)),
+      latitude: map['latitude'] as String,
+      longitude: map['longitude'] as String,
+      country: map['country'] as String,
+      state: map['state'] as String,
+      city: map['city'] as String,
+      address: map['address'] as String,
+      pincode: map['pincode'] as String,
+      products: List<Map<String, dynamic>>.from(
+        (map['products'] as List<dynamic>).map<Map<String, dynamic>>(
+          (x) => x,
+        ),
+      ).toList(),
+      gst_code: map['gst_code'] as String,
+      serving_radius: map['serving_radius'] as int,
+      status: map['status'] as String,
+      rating: map['rating'] as int,
       deviceToken: map['deviceToken'] as String,
+      reviews: List<String>.from((map['reviews'] as List<dynamic>)),
+      opening_time: DateTime.parse(map['opening_time'] as String),
+      closing_time: DateTime.parse(map['closing_time'] as String),
+      categories_list: List<Map<String, dynamic>>.from(
+        (map['categories_list'] as List<dynamic>).map<Map<String, dynamic>>(
+          (x) => x,
+        ),
+      ).toList(),
+      is_delivery_boy: map['is_delivery_boy'] as bool,
+      logo: map['logo'] as String,
+      facebook: map['facebook'] as String,
+      google: map['google'] as String,
+      twitter: map['twitter'] as String,
+      youtube: map['youtube'] as String,
+      instagram: map['instagram'] as String,
+      id: map['_id'] != null ? map['_id'] as String : null,
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'] as String)
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.parse(map['updatedAt'] as String)
+          : null,
+      v: map['__v'] != null ? map['__v'] as int : null,
     );
   }
 

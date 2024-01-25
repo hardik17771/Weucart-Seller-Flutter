@@ -63,7 +63,7 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 SellerModel sellerModel = snapshot.data!;
-                List<String> shopIds = sellerModel.shops;
+                List<Map<String, dynamic>> shopIds = sellerModel.shops_owned;
                 return Column(
                   children: [
                     if (shopIds.isNotEmpty)
@@ -76,7 +76,8 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
                             itemBuilder: (BuildContext context, int index) {
                               return FutureBuilder(
                                 future: _shopController.readShopData(
-                                    shopId: shopIds[index]),
+                                    shopId:
+                                        shopIds[index]["shop_id"].toString()),
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshot) {
                                   if (snapshot.hasData) {
@@ -172,9 +173,10 @@ class _SellerShopDashboardScreenState extends State<SellerShopDashboardScreen> {
                 (route) => false,
               );
             } else {
-              showSnackBar(
+              showCustomDialog(
                 context: context,
-                text: "Select a shop to continue",
+                title: "No Shop Selected",
+                message: "Select or Add a shop to continue to your shop",
               );
             }
           },

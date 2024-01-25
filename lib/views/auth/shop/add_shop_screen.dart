@@ -25,7 +25,7 @@ class _AddShopScreenState extends State<AddShopScreen> {
   final TextEditingController _emailIdController = TextEditingController();
   final TextEditingController _gstCodeController = TextEditingController();
   TimeOfDay shopOpeningTime = const TimeOfDay(hour: 8, minute: 0);
-  TimeOfDay shopClosingTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay shopClosingTime = const TimeOfDay(hour: 20, minute: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +161,12 @@ class _AddShopScreenState extends State<AddShopScreen> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
-                      Icons.phone,
+                      Icons.currency_rupee,
                       color: AppColors.primaryButtonColor,
+                    ),
+                    suffix: Icon(
+                      Icons.verified_user_outlined,
+                      color: AppColors.greyColor,
                     ),
                     filled: true,
                     fillColor: AppColors.whiteColor,
@@ -257,14 +261,16 @@ class _AddShopScreenState extends State<AddShopScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Choose your product categories',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 12),
+
+                // Pending feature
+                // Text(
+                //   'Choose your product categories',
+                //   style: GoogleFonts.poppins(
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
+                // const SizedBox(height: 12),
               ],
             ),
           ),

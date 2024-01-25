@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/auth_controller.dart';
 import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
+import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/constants.dart';
@@ -25,8 +25,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final SellerController _sellerController = SellerController();
   final ShopController _shopController = ShopController();
-  final AuthController _authController = AuthController();
   final OrderController _orderController = OrderController();
 
   @override
@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       Text(
-                                        shopModel.shopName,
+                                        shopModel.name,
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14,
@@ -651,7 +651,7 @@ class _HomeScreenState extends State<HomeScreen> {
               GestureDetector(
                 onTap: () async {
                   Navigator.pop(context);
-                  // _authController.logOut(context: context);
+                  _sellerController.logOut(context: context);
                 },
                 child: Container(
                   height: 36,

@@ -60,6 +60,7 @@ dependencies:
   path_provider: ^2.1.1
   open_document: ^1.0.7
   whatsapp_share2: ^2.0.2
+  easy_search_bar: ^2.5.0
 
 dev_dependencies:
   flutter_test:

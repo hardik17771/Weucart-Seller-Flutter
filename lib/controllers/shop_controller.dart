@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';
-import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
+import 'package:weu_cart_seller/views/auth/shop/seller_shop_dashboard_screen.dart';
 
 class ShopController {
+  final SellerController _sellerController = SellerController();
   // ------------------------- User - CRUD in db ------------------------>
 
   Future<void> createShopData({
@@ -27,33 +29,52 @@ class ShopController {
       var statusCode = jsonData["status_code"];
       var message = jsonData["message"];
 
-      if (statusCode == 200) {
-        var dataMap = jsonData['shop'];
-        recievedShopModel = ShopModel.fromMap(dataMap);
+      debugPrint(response.body.toString());
 
-        await saveLocalShopData(shopModel: shopModel);
+      if (statusCode == 200) {
+        var dataMap = jsonData['data'];
+        recievedShopModel = ShopModel.fromMap(dataMap);
 
         showToast(text: "Shop Created");
 
-        // // ignore: use_build_context_synchronously
-        // Navigator.of(context).pushAndRemoveUntil(
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       return const DashboardScreen(pageIndex: 0);
-        //     },
-        //   ),
-        //   (route) => false,
-        // );
+        /// --- This time we are fetching sellerModel to update the localSellerData ---->
+
+        // ignore: use_build_context_synchronously
+        await _sellerController.readSellerData(
+          sellerUid: recievedShopModel.sellerUid,
+          context: context,
+        );
+
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) {
+              return const SellerShopDashboardScreen();
+            },
+          ),
+          (route) => false,
+        );
       } else {
         // ignore: use_build_context_synchronously
-        showSnackBar(context: context, text: message);
+        showCustomDialog(
+          context: context,
+          title: "Registration Error",
+          message: message,
+        );
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      showSnackBar(context: context, text: e.toString());
+      showCustomDialog(
+        context: context,
+        title: "Registration Error",
+        message: e.toString(),
+      );
+
+      debugPrint(e.toString());
     }
   }
 
+  // Testing Remain
   Future<void> updateShopData({
     required ShopModel shopModel,
     required BuildContext context,
@@ -91,35 +112,30 @@ class ShopController {
   Future<ShopModel?> readShopData({
     required String shopId,
   }) async {
-    // ShopModel? recievedShopModel;
-    // try {
-    //   final url = Uri.parse("${AppConstants.backendUrl}/api/read-shop");
-    //   final response = await http.post(
-    //     url,
-    //     headers: {"Content-Type": "application/json"},
-    //     body: jsonEncode({'shop_id': shopId}),
-    //   );
+    ShopModel? recievedShopModel;
+    try {
+      final url = Uri.parse("${AppConstants.backendUrl}/api/shop-details");
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({'shop_id': shopId}),
+      );
 
-    //   var jsonData = json.decode(response.body);
-    //   var statusCode = jsonData["status_code"];
-    //   var message = jsonData["message"];
+      var jsonData = json.decode(response.body);
+      var statusCode = jsonData["status_code"];
+      var message = jsonData["message"];
 
-    //   if (statusCode == 200) {
-    //     var dataMap = jsonData['shop'];
-    //     recievedShopModel = ShopModel.fromMap(dataMap);
+      if (statusCode == 200) {
+        var dataMap = jsonData['data'];
+        recievedShopModel = ShopModel.fromMap(dataMap);
+      } else {
+        debugPrint(message);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
 
-    //     // save to Local Storage
-    //     await saveLocalShopData(shopModel: recievedShopModel);
-    //   } else {
-    //     debugPrint(message);
-    //   }
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
-
-    // return recievedShopModel;
-
-    return dummyShopModel;
+    return recievedShopModel;
   }
 
   // -------------------------- User CRUD in shared preferences ------------>

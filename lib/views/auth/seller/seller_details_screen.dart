@@ -181,15 +181,16 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                                         });
 
                                         SellerModel sellerModel = SellerModel(
-                                          sellerId: "0",
+                                          seller_id: 0,
                                           sellerUid: widget.user.uid,
                                           name:
                                               "${_firstNameController.text.trim()} ${_lastNameController.text.trim()}",
                                           email: _emailIdController.text.trim(),
-                                          phoneNumber: widget.user.phoneNumber!,
+                                          phone: widget.user.phoneNumber!,
+                                          deviceToken: "1",
                                           profileImage:
                                               AppConstants.defaultProfileImage,
-                                          shops: [],
+                                          shops_owned: [],
                                         );
 
                                         await _sellerController

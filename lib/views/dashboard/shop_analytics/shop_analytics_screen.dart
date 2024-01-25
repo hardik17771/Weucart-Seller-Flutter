@@ -86,7 +86,7 @@ class _ShopAnalyticsScreenState extends State<ShopAnalyticsScreen> {
                               ),
                             ),
                             Text(
-                              shopModel.shopName,
+                              shopModel.name,
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 10,

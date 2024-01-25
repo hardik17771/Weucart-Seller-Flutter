@@ -74,7 +74,7 @@ class PdfInvoiceController {
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
                           pw.Text(
-                            shopModel.shopName,
+                            shopModel.name,
                             style: const pw.TextStyle(
                               fontSize: 20,
                             ),
@@ -93,9 +93,9 @@ class PdfInvoiceController {
                     mainAxisAlignment: pw.MainAxisAlignment.start,
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      pw.Text(shopModel.addressModel.address),
-                      pw.Text(shopModel.phoneNumber),
-                      pw.Text("GST No. xxxxxxxxx"),
+                      pw.Text(shopModel.address),
+                      pw.Text(shopModel.manager_phone),
+                      pw.Text(shopModel.gst_code),
                     ],
                   )
                 ],
@@ -130,7 +130,7 @@ class PdfInvoiceController {
               ),
               pw.SizedBox(height: 50),
               pw.Text(
-                "Dear Customer, thanks for buying at ${shopModel.shopName}, feel free to see the list of items below.",
+                "Dear Customer, thanks for buying at ${shopModel.name}, feel free to see the list of items below.",
                 textAlign: pw.TextAlign.start,
               ),
               pw.SizedBox(height: 24),
@@ -147,7 +147,7 @@ class PdfInvoiceController {
               ),
               pw.SizedBox(height: 4),
               pw.Text(
-                shopModel.sellerName,
+                shopModel.name,
                 textAlign: pw.TextAlign.start,
               )
             ],

@@ -4,10 +4,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/fcm_notification_controller.dart';
+import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';
-import 'package:weu_cart_seller/models/address_model.dart';
 import 'package:weu_cart_seller/models/seller_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
@@ -39,6 +38,8 @@ class ShopLocationScreen extends StatefulWidget {
 }
 
 class _ShopLocationScreenState extends State<ShopLocationScreen> {
+  final ShopController _shopController = ShopController();
+
   Position? _currentPosition;
   late bool _isLocationLoading;
   late bool _isDataLoading;
@@ -212,12 +213,12 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                         text: "Get Live Location",
                         bgColor: AppColors.primaryButtonColor,
                         textColor: AppColors.whiteColor,
-                        onPress: () {
+                        onPress: () async {
                           setState(() {
                             _isLocationLoading = true;
                           });
 
-                          _getCurrentPosition();
+                          await _getCurrentPosition();
 
                           setState(() {
                             _isLocationLoading = false;
@@ -335,12 +336,17 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                         _isDataLoading = true;
                       });
 
-                      debugPrint("Shop Created");
-
                       String deviceToken =
                           await FCMNotificationController().getDeviceToken();
 
-                      UserAddressModel addressModel = UserAddressModel(
+                      ShopModel shopModel = ShopModel(
+                        seller_id: widget.sellerModel.seller_id,
+                        sellerUid: widget.sellerModel.sellerUid,
+                        manager_phone: widget.phoneNumber,
+                        shop_id: 0,
+                        name: widget.shopName,
+                        email: widget.emailId,
+                        shop_images: [],
                         latitude: _currentPosition!.latitude.toString(),
                         longitude: _currentPosition!.longitude.toString(),
                         address: _currentAddressController.text.trim(),
@@ -348,32 +354,30 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                         state: "State",
                         country: "India",
                         pincode: _currentPincodeController.text.trim(),
-                        id: "9",
-                      );
-
-                      ShopModel shopModel = ShopModel(
-                        shopId: "9",
-                        shopUid: "9",
-                        shopName: widget.shopName,
-                        sellerId: widget.sellerModel.sellerId,
-                        sellerUid: widget.sellerModel.sellerUid,
-                        sellerName: widget.sellerModel.name,
-                        phoneNumber: widget.phoneNumber,
-                        emailId: widget.emailId,
-                        gstCode: widget.emailId,
-                        logo: AppConstants.defaultLogoImage,
-                        image: AppConstants.defaultShopImage,
-                        categoryId: widget.categories,
-                        addressModel: addressModel,
-                        openingTime: widget.shopOpeningTime,
-                        closingTime: widget.shopClosingTime,
-                        deliveryTime: "60 Mins",
-                        onlineStatus: "Online",
-                        rating: "5",
+                        products: [],
+                        gst_code: widget.gstCode,
+                        serving_radius: 10,
+                        status: "Offline",
+                        rating: 0,
                         deviceToken: deviceToken,
+                        reviews: [],
+                        opening_time: widget.shopOpeningTime,
+                        closing_time: widget.shopClosingTime,
+                        categories_list: [],
+                        is_delivery_boy: false,
+                        logo: "",
+                        facebook: "",
+                        google: "",
+                        twitter: "",
+                        youtube: "",
+                        instagram: "",
                       );
 
-                      // API Calls & Pop to SellerShopDashboard
+                      // ignore: use_build_context_synchronously
+                      await _shopController.createShopData(
+                        context: context,
+                        shopModel: shopModel,
+                      );
 
                       setState(() {
                         _isDataLoading = false;
