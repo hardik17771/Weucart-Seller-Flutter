@@ -37,9 +37,9 @@ class _OfflineOrderBillingPageState extends State<OfflineOrderBillingPage> {
   void initState() {
     super.initState();
     for (int i = 0; i < widget.products.length; i++) {
-      totalQuantity += widget.products[i].quantity;
+      totalQuantity += widget.products[i].total_quantity;
       totalAmount +=
-          widget.products[i].unit_price * widget.products[i].quantity;
+          widget.products[i].unit_price * widget.products[i].total_quantity;
     }
   }
 

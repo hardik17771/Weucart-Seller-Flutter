@@ -89,10 +89,10 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (widget.productModel.quantity > 0) {
-                            setState(() {
-                              widget.productModel.quantity--;
-                            });
+                          if (widget.productModel.total_quantity > 0) {
+                            // setState(() {
+                            //   widget.productModel.total_quantity--;
+                            // });
                           }
                         },
                         child: Padding(
@@ -113,7 +113,7 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                           color: Colors.white,
                         ),
                         child: Text(
-                          widget.productModel.quantity.toString(),
+                          widget.productModel.total_quantity.toString(),
                           style: GoogleFonts.poppins(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -123,9 +123,9 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            widget.productModel.quantity++;
-                          });
+                          // setState(() {
+                          //   widget.productModel.total_quantity++;
+                          // });
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),

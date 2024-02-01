@@ -7,6 +7,7 @@ import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/core/utils.dart';
 import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/views/dashboard/add_product/product_search_delegate.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
@@ -19,27 +20,25 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   late bool _isLoading;
-  final _formKey = GlobalKey<FormState>();
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
 
   final ProductController _productController = ProductController();
   final TextEditingController _productISBNController = TextEditingController();
 
-  // New Product
   ProductModel? weucartProductModel;
+  AzureProductModel? azureProductModel;
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _productQuantityController =
       TextEditingController();
   final TextEditingController _productPriceController = TextEditingController();
-
-  late String _azureSearchProductName;
-  AzureProductModel? azureProductModel;
 
   late bool _showProductFillingDetails;
 
   @override
   void initState() {
     super.initState();
-    _azureSearchProductName = "";
+    _isLoading = false;
     _showProductFillingDetails = false;
   }
 
@@ -156,6 +155,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     // Reseting
                     _showProductFillingDetails = false;
                     weucartProductModel = null;
+                    azureProductModel = null;
 
                     _productNameController.text = "";
                     _productQuantityController.text = "";
@@ -163,7 +163,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   });
 
                   if (_productISBNController.text != "") {
-                    // Search this productISBN in Weucart Product db
+                    // Weucart productByISBN API Call
                     ProductModel? productModel =
                         await _productController.getProductByISBN(
                       context: context,
@@ -177,10 +177,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         _productNameController.text = productModel.name;
                       });
                     } else {
-                      // Search Product by name in Azure Product Data d
-                      setState(() {
-                        _productNameController.text = "Null";
-                      });
+                      // Azure ProductByName API Call Data
                     }
 
                     setState(() {
@@ -223,161 +220,341 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              (_showProductFillingDetails != true)
+              (_showProductFillingDetails == false)
                   ? Container()
-                  : Form(
-                      key: _formKey,
-                      child: Container(
-                        width: width,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 12),
-                            (weucartProductModel != null)
-                                ? TextFormField(
-                                    readOnly: true,
-                                    controller: _productNameController,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Enter your product name';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: AppColors.whiteColor,
-                                      errorStyle:
-                                          GoogleFonts.poppins(fontSize: 10),
-                                      labelText: 'Product Name *',
-                                      labelStyle: GoogleFonts.poppins(
-                                        color: AppColors.blackColor,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              AppColors.primaryContainerColor,
-                                          width: 10,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(15)),
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.all(12.0),
+                  : (weucartProductModel != null)
+                      ? Form(
+                          key: _formKey1,
+                          child: Container(
+                            width: width,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: AppColors.whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 12),
+                                TextFormField(
+                                  readOnly: true,
+                                  controller: _productNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Enter your product name';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: AppColors.whiteColor,
+                                    errorStyle:
+                                        GoogleFonts.poppins(fontSize: 10),
+                                    labelText: 'Product Name *',
+                                    labelStyle: GoogleFonts.poppins(
+                                      color: AppColors.blackColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  )
-                                : FutureBuilder<List<AzureProductModel>>(
-                                    future: null,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        List<AzureProductModel>
-                                            suggestedProducts = snapshot.data!;
-                                        return EasySearchBar(
-                                          title:
-                                              const Text('Enter product name'),
-                                          onSearch: (value) => setState(
-                                            () {
-                                              _azureSearchProductName = value;
-                                            },
-                                          ),
-                                          suggestions: [],
-                                        );
-                                      } else {
-                                        return const CustomLoader();
-                                      }
-                                    }),
-                            const SizedBox(height: 12),
-                            TextFormField(
-                              controller: _productQuantityController,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter your product quantity';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.whiteColor,
-                                errorStyle: GoogleFonts.poppins(fontSize: 10),
-                                labelText: 'Quantity *',
-                                labelStyle: GoogleFonts.poppins(
-                                  color: AppColors.blackColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.primaryContainerColor,
-                                    width: 10,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColors.primaryContainerColor,
+                                        width: 10,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(15)),
+                                    ),
+                                    contentPadding: const EdgeInsets.all(12.0),
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(15)),
                                 ),
-                                contentPadding: const EdgeInsets.all(12.0),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            TextFormField(
-                              controller: _productPriceController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter your product unit price';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.whiteColor,
-                                errorStyle: GoogleFonts.poppins(fontSize: 10),
-                                labelText: 'Product Price *',
-                                labelStyle: GoogleFonts.poppins(
-                                  color: AppColors.blackColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColors.primaryContainerColor,
-                                    width: 10,
+                                const SizedBox(height: 12),
+                                TextFormField(
+                                  controller: _productQuantityController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Enter your product quantity';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: AppColors.whiteColor,
+                                    errorStyle:
+                                        GoogleFonts.poppins(fontSize: 10),
+                                    labelText: 'Quantity *',
+                                    labelStyle: GoogleFonts.poppins(
+                                      color: AppColors.blackColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColors.primaryContainerColor,
+                                        width: 10,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(15)),
+                                    ),
+                                    contentPadding: const EdgeInsets.all(12.0),
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(15)),
                                 ),
-                                contentPadding: const EdgeInsets.all(12.0),
-                              ),
+                                const SizedBox(height: 12),
+                                TextFormField(
+                                  controller: _productPriceController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Enter your product unit price';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: AppColors.whiteColor,
+                                    errorStyle:
+                                        GoogleFonts.poppins(fontSize: 10),
+                                    labelText: 'Product Price *',
+                                    labelStyle: GoogleFonts.poppins(
+                                      color: AppColors.blackColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColors.primaryContainerColor,
+                                        width: 10,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(15)),
+                                    ),
+                                    contentPadding: const EdgeInsets.all(12.0),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                CustomButton(
+                                  text: "Save",
+                                  bgColor: AppColors.primaryButtonColor,
+                                  textColor: AppColors.whiteColor,
+                                  onPress: () async {
+                                    if (_formKey1.currentState!.validate()) {
+                                      setState(() {
+                                        _isLoading = true;
+                                        _showProductFillingDetails = false;
+                                      });
+
+                                      // Add Weucart Product Controller -> Add Product API
+                                      debugPrint("Product Add API");
+
+                                      await _productController.addProductToShop(
+                                        context: context,
+                                        weucartProductModel:
+                                            weucartProductModel,
+                                        azureProductModel: azureProductModel,
+                                        quantity: _productQuantityController
+                                            .text
+                                            .trim(),
+                                        price:
+                                            _productPriceController.text.trim(),
+                                        productISBN:
+                                            _productISBNController.text.trim(),
+                                      );
+
+                                      setState(() {
+                                        _isLoading = false;
+
+                                        weucartProductModel = null;
+                                        azureProductModel = null;
+
+                                        _productISBNController.text = "";
+                                        _productNameController.text = "";
+                                        _productQuantityController.text = "";
+                                        _productPriceController.text = "";
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 16),
-                            CustomButton(
-                              text: "Save",
+                          ),
+                        )
+                      : (azureProductModel == null)
+                          ? CustomButton(
+                              text: "Search Product By Name",
                               bgColor: AppColors.primaryButtonColor,
                               textColor: AppColors.whiteColor,
                               onPress: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
+                                AzureProductModel? searchProductModel =
+                                    await showSearch(
+                                  context: context,
+                                  delegate: ProductSearchDelegate(),
+                                );
 
-                                  // _productController.addProduct();
-                                  debugPrint("Product Add API");
-
+                                if (searchProductModel != null) {
                                   setState(() {
-                                    _isLoading = false;
+                                    azureProductModel = searchProductModel;
+
+                                    _productNameController.text =
+                                        azureProductModel!.product;
                                   });
                                 }
-                              },
+                              })
+                          : Form(
+                              key: _formKey2,
+                              child: Container(
+                                width: width,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: AppColors.whiteColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 12),
+                                    TextFormField(
+                                      readOnly: true,
+                                      controller: _productNameController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Enter your product name';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: AppColors.whiteColor,
+                                        errorStyle:
+                                            GoogleFonts.poppins(fontSize: 10),
+                                        labelText: 'Product Name *',
+                                        labelStyle: GoogleFonts.poppins(
+                                          color: AppColors.blackColor,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                AppColors.primaryContainerColor,
+                                            width: 10,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.all(12.0),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    TextFormField(
+                                      controller: _productQuantityController,
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Enter your product quantity';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: AppColors.whiteColor,
+                                        errorStyle:
+                                            GoogleFonts.poppins(fontSize: 10),
+                                        labelText: 'Quantity *',
+                                        labelStyle: GoogleFonts.poppins(
+                                          color: AppColors.blackColor,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                AppColors.primaryContainerColor,
+                                            width: 10,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.all(12.0),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    TextFormField(
+                                      controller: _productPriceController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Enter your product unit price';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: AppColors.whiteColor,
+                                        errorStyle:
+                                            GoogleFonts.poppins(fontSize: 10),
+                                        labelText: 'Product Price *',
+                                        labelStyle: GoogleFonts.poppins(
+                                          color: AppColors.blackColor,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                AppColors.primaryContainerColor,
+                                            width: 10,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.all(12.0),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    CustomButton(
+                                      text: "Save",
+                                      bgColor: AppColors.primaryButtonColor,
+                                      textColor: AppColors.whiteColor,
+                                      onPress: () async {
+                                        if (_formKey2.currentState!
+                                            .validate()) {
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+
+                                          // Add Azure Product Controller -> Add Product API
+                                          debugPrint("Product Add API");
+
+                                          await _productController
+                                              .addProductToShop(
+                                            context: context,
+                                            weucartProductModel:
+                                                weucartProductModel!,
+                                            azureProductModel:
+                                                azureProductModel!,
+                                            quantity: _productQuantityController
+                                                .text
+                                                .trim(),
+                                            price: _productPriceController.text
+                                                .trim(),
+                                            productISBN: _productISBNController
+                                                .text
+                                                .trim(),
+                                          );
+
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
             ],
           ),
         ),

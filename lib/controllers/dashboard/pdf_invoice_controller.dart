@@ -39,9 +39,9 @@ class PdfInvoiceController {
       for (var product in products)
         CustomRow(
           name: product.name,
-          quantity: product.quantity.toString(),
+          quantity: product.total_quantity.toString(),
           unitPrice: product.unit_price.toString(),
-          totalPrice: "${product.quantity * product.unit_price}",
+          totalPrice: "${product.total_quantity * product.unit_price}",
         ),
       CustomRow(
         name: "Total Amount",
@@ -201,7 +201,7 @@ class PdfInvoiceController {
   String getSubTotal(List<ProductModel> products) {
     double total = 0.0;
     for (int i = 0; i < products.length; i++) {
-      total += products[i].unit_price * products[i].quantity;
+      total += products[i].unit_price * products[i].total_quantity;
     }
     return total.toStringAsFixed(2);
   }

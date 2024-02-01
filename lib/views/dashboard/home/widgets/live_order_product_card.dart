@@ -33,7 +33,7 @@ class LiveOrderProductCard extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(productModel.featured_img),
+                        image: NetworkImage(productModel.thumbnail_img),
                         fit: BoxFit.fitHeight,
                       ),
                       color: AppColors.whiteColor,
@@ -69,7 +69,7 @@ class LiveOrderProductCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            productModel.rating.toString(),
+                            "4.4",
                             style: GoogleFonts.poppins(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
@@ -97,7 +97,7 @@ class LiveOrderProductCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15.5),
                 ),
                 child: Text(
-                  "${productModel.quantity} N",
+                  "${productModel.total_quantity} N",
                   style: GoogleFonts.poppins(
                     fontSize: 7.5,
                     fontWeight: FontWeight.w500,
@@ -107,7 +107,7 @@ class LiveOrderProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                "Rs. ${productModel.quantity * productModel.unit_price}",
+                "Rs. ${productModel.total_quantity * productModel.unit_price}",
                 style: GoogleFonts.poppins(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,

@@ -41,7 +41,7 @@ class ShopProductCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(productModel.featured_img),
+                      image: NetworkImage(productModel.thumbnail_img),
                       fit: BoxFit.fitHeight,
                     ),
                     color: AppColors.whiteColor,
@@ -76,7 +76,7 @@ class ShopProductCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            productModel.rating.toString(),
+                            "4.4",
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 10,
@@ -88,7 +88,7 @@ class ShopProductCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "${productModel.quantity} N",
+                        "${productModel.total_quantity} N",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 13,

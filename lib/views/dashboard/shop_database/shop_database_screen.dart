@@ -103,8 +103,9 @@ class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
                                     showEditProductDialog(
                                         context: context,
                                         productName: products[index].name,
-                                        productQuantity:
-                                            products[index].quantity.toString(),
+                                        productQuantity: products[index]
+                                            .total_quantity
+                                            .toString(),
                                         productUnitPrice: products[index]
                                             .unit_price
                                             .toString());

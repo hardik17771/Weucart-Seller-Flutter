@@ -59,7 +59,7 @@ class _BillingProductCardState extends State<BillingProductCard> {
                 ),
               ),
               child: Text(
-                widget.productModel.quantity.toString(),
+                widget.productModel.total_quantity.toString(),
                 style: GoogleFonts.poppins(
                   color: AppColors.blackColor,
                   fontSize: 10,
@@ -98,7 +98,7 @@ class _BillingProductCardState extends State<BillingProductCard> {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 textAlign: TextAlign.center,
-                "${widget.productModel.unit_price * widget.productModel.quantity}",
+                "${widget.productModel.unit_price * widget.productModel.total_quantity}",
                 style: GoogleFonts.poppins(
                   color: AppColors.blackColor,
                   fontSize: 10,
