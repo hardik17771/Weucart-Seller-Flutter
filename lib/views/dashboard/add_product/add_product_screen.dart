@@ -1,4 +1,3 @@
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +8,6 @@ import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 import 'package:weu_cart_seller/views/dashboard/add_product/product_search_delegate.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
-import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -107,9 +105,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         color: AppColors.blackColor,
                       ),
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _productISBNController,
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.length != 13) {
+                          return 'Enter a ISBN Code';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         hintText: '',
                         filled: true,
@@ -532,9 +536,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                               .addProductToShop(
                                             context: context,
                                             weucartProductModel:
-                                                weucartProductModel!,
+                                                weucartProductModel,
                                             azureProductModel:
-                                                azureProductModel!,
+                                                azureProductModel,
                                             quantity: _productQuantityController
                                                 .text
                                                 .trim(),
@@ -547,6 +551,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                                           setState(() {
                                             _isLoading = false;
+
+                                            weucartProductModel = null;
+                                            azureProductModel = null;
+
+                                            _productISBNController.text = "";
+                                            _productNameController.text = "";
+                                            _productQuantityController.text =
+                                                "";
+                                            _productPriceController.text = "";
                                           });
                                         }
                                       },

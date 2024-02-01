@@ -1,6 +1,5 @@
 import 'package:weu_cart_seller/models/address_model.dart';
 import 'package:weu_cart_seller/models/app_info/faq_model.dart';
-import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/product_model.dart';
 
@@ -34,19 +33,19 @@ ProductModel dummmyProductModel = ProductModel(
   mrp_price: 89,
 );
 
-AzureProductModel dummyAzureProductModel = AzureProductModel(
-  indexx: 53,
-  product: "Acne & Oil Control Face Wash",
-  category: "Beauty & Hygiene",
-  sub_category: "Men's Grooming",
-  brand: "Red Hunt",
-  sale_price: 80,
-  market_price: 100,
-  typee: "Face & Body",
-  rating: 4,
-  descriptionn:
-      "Natural mineral kaolin deep cleans removes dirt, pollution and bacteria. Added sliver resists the impact and spread of acne causing bacteria",
-);
+// AzureProductModel dummyAzureProductModel = AzureProductModel(
+//   indexx: 53,
+//   product: "Acne & Oil Control Face Wash",
+//   category: "Beauty & Hygiene",
+//   sub_category: "Men's Grooming",
+//   brand: "Red Hunt",
+//   sale_price: "80",
+//   market_price: "100",
+//   typee: "Face & Body",
+//   rating: "4",
+//   descriptionn:
+//       "Natural mineral kaolin deep cleans removes dirt, pollution and bacteria. Added sliver resists the impact and spread of acne causing bacteria",
+// );
 
 OrderModel dummyOrderModel = OrderModel(
   customerName: "Gautam Jain",

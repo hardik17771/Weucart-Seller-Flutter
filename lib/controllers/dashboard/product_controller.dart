@@ -144,7 +144,7 @@ class ProductController {
         added_by: "",
         category_id: 2, // currently static
         main_subcategory_id: 4, // currently static
-        mrp_price: azureProductModel.market_price.ceil(),
+        mrp_price: azureProductModel.market_price,
         description: azureProductModel.descriptionn,
         shops: [
           {
@@ -222,9 +222,9 @@ class ProductController {
         var dataMap = jsonData.cast<Map<String, dynamic>>();
         debugPrint(dataMap.toString());
 
-        // products = dataMap
-        //     .map<AzureProductModel>((e) => AzureProductModel.fromMap(e))
-        //     .toList();
+        products = dataMap
+            .map<AzureProductModel>((e) => AzureProductModel.fromMap(e))
+            .toList();
       } else {
         // ignore: use_build_context_synchronously
         showCustomDialog(

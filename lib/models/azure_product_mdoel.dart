@@ -6,10 +6,10 @@ class AzureProductModel {
   final String category;
   final String sub_category;
   final String brand;
-  final int sale_price;
-  final int market_price;
+  final sale_price;
+  final market_price;
   final String typee;
-  final double rating;
+  final rating;
   final String descriptionn;
   AzureProductModel({
     required this.indexx,
@@ -46,10 +46,10 @@ class AzureProductModel {
       category: map['category'] as String,
       sub_category: map['sub_category'] as String,
       brand: map['brand'] as String,
-      sale_price: map['sale_price'] as int,
-      market_price: map['market_price'] as int,
+      sale_price: map['sale_price'],
+      market_price: map['market_price'],
       typee: map['typee'] as String,
-      rating: map['rating'] as double,
+      rating: map['rating'],
       descriptionn: map['descriptionn'] as String,
     );
   }
