@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class ShopModel {
   final int seller_id;
-  final String sellerUid;
+  final String? sellerUid;
   final String manager_phone;
   final int shop_id;
   final String name;
@@ -18,7 +18,10 @@ class ShopModel {
   final String pincode;
 
   final List<Map<String, dynamic>> products;
+  final List<Map<String, dynamic>> sold_products;
+  final int no_of_products;
   final String gst_code;
+  final bool is_gst_code;
   final int serving_radius;
   final String status;
   final int rating;
@@ -29,7 +32,7 @@ class ShopModel {
   final List<Map<String, dynamic>> categories_list;
   final bool is_delivery_boy;
 
-  final String logo;
+  final String? logo;
   final String facebook;
   final String google;
   final String twitter;
@@ -40,6 +43,7 @@ class ShopModel {
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
+
   ShopModel({
     required this.seller_id,
     required this.sellerUid,
@@ -56,7 +60,10 @@ class ShopModel {
     required this.address,
     required this.pincode,
     required this.products,
+    required this.sold_products,
+    required this.no_of_products,
     required this.gst_code,
+    required this.is_gst_code,
     required this.serving_radius,
     required this.status,
     required this.rating,
@@ -95,7 +102,10 @@ class ShopModel {
       'address': address,
       'pincode': pincode,
       'products': products,
+      'sold_products': sold_products,
+      'no_of_products': no_of_products,
       'gst_code': gst_code,
+      'is_gst_code': is_gst_code,
       'serving_radius': serving_radius,
       'status': status,
       'rating': rating,
@@ -121,7 +131,7 @@ class ShopModel {
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
       seller_id: map['seller_id'] as int,
-      sellerUid: map['sellerUid'] as String,
+      sellerUid: map['sellerUid'] != null ? map['sellerUid'] as String : null,
       manager_phone: map['manager_phone'] as String,
       shop_id: map['shop_id'] as int,
       name: map['name'] as String,
@@ -138,8 +148,15 @@ class ShopModel {
         (map['products'] as List<dynamic>).map<Map<String, dynamic>>(
           (x) => x,
         ),
-      ).toList(),
+      ),
+      sold_products: List<Map<String, dynamic>>.from(
+        (map['sold_products'] as List<dynamic>).map<Map<String, dynamic>>(
+          (x) => x,
+        ),
+      ),
+      no_of_products: map['no_of_products'] as int,
       gst_code: map['gst_code'] as String,
+      is_gst_code: map['is_gst_code'] as bool,
       serving_radius: map['serving_radius'] as int,
       status: map['status'] as String,
       rating: map['rating'] as int,
@@ -151,9 +168,9 @@ class ShopModel {
         (map['categories_list'] as List<dynamic>).map<Map<String, dynamic>>(
           (x) => x,
         ),
-      ).toList(),
+      ),
       is_delivery_boy: map['is_delivery_boy'] as bool,
-      logo: map['logo'] as String,
+      logo: map['logo'] != null ? map['logo'] as String : null,
       facebook: map['facebook'] as String,
       google: map['google'] as String,
       twitter: map['twitter'] as String,

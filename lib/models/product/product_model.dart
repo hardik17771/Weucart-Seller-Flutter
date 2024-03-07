@@ -9,18 +9,24 @@ class ProductModel {
   final List<Map<String, dynamic>> shops;
   final String isbn;
   final String description;
-  int total_quantity;
+  final int total_quantity;
   final int num_of_sale;
   final String? brand_id;
   final List<String> photos;
   final String thumbnail_img;
   final int unit_price;
   final int mrp_price;
+  final List<String> reviews;
+  final String? rating;
+  final Map<String, dynamic> shop_with_least_price;
+  final Map<String, dynamic> shop_with_second_least_price;
+  final Map<String, dynamic> shop_with_maximum_quantity;
 
   final String? id;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
+
   ProductModel({
     required this.product_id,
     required this.name,
@@ -37,6 +43,11 @@ class ProductModel {
     required this.thumbnail_img,
     required this.unit_price,
     required this.mrp_price,
+    required this.reviews,
+    this.rating,
+    required this.shop_with_least_price,
+    required this.shop_with_second_least_price,
+    required this.shop_with_maximum_quantity,
     this.id,
     this.createdAt,
     this.updatedAt,
@@ -60,6 +71,11 @@ class ProductModel {
       'thumbnail_img': thumbnail_img,
       'unit_price': unit_price,
       'mrp_price': mrp_price,
+      'rating': rating,
+      'reviews': reviews,
+      'shop_with_least_price': shop_with_least_price,
+      'shop_with_second_least_price': shop_with_second_least_price,
+      'shop_with_maximum_quantity': shop_with_maximum_quantity,
       '_id': id,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
@@ -88,6 +104,17 @@ class ProductModel {
       thumbnail_img: map['thumbnail_img'] as String,
       unit_price: map['unit_price'] as int,
       mrp_price: map['mrp_price'] as int,
+      rating: (map['rating'] != null) ? (map['rating'] as String) : null,
+      reviews: List<String>.from((map['reviews'] as List<dynamic>)),
+      shop_with_least_price: Map<String, dynamic>.from(
+        map['shop_with_least_price'] as Map<String, dynamic>,
+      ),
+      shop_with_second_least_price: Map<String, dynamic>.from(
+        map['shop_with_second_least_price'] as Map<String, dynamic>,
+      ),
+      shop_with_maximum_quantity: Map<String, dynamic>.from(
+        map['shop_with_maximum_quantity'] as Map<String, dynamic>,
+      ),
       id: map['_id'] != null ? map['_id'] as String : null,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)

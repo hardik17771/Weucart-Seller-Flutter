@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/shop_database_controller.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/dummy_models.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/dashboard/add_product/add_product_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/shop_database/widgets/product_edit_dialog.dart';
@@ -21,7 +20,21 @@ class ShopDatabaseScreen extends StatefulWidget {
 
 class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
   final ShopController _shopController = ShopController();
-  final ProductController _productController = ProductController();
+  final ShopDatabaseController _shopDatabaseController =
+      ShopDatabaseController();
+
+  Map<String, dynamic> getMyShopProductData({
+    required List<Map<String, dynamic>> allShops,
+    required ShopModel shopModel,
+  }) {
+    Map<String, dynamic> myShopProductData = {};
+    for (var shop in allShops) {
+      if (shop["shop_id"] == shopModel.shop_id) {
+        myShopProductData = shop;
+      }
+    }
+    return myShopProductData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,34 +74,25 @@ class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
               if (snapshot.hasData) {
                 ShopModel shopModel = snapshot.data!;
                 return FutureBuilder(
-                  future:
-                      _productController.getShopProducts(shopModel: shopModel),
+                  future: _shopDatabaseController.getShopProducts(
+                      shopModel: shopModel),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<ProductModel> products = snapshot.data!;
                       if (products.isEmpty) {
-                        return SizedBox(
-                          height: size.height,
-                          width: size.width,
-                          child: SizedBox(
-                            width: size.width / 2,
-                            child: Center(
-                              child: CustomButton(
-                                text: "Add Products in shop",
-                                bgColor: AppColors.primaryButtonColor,
-                                textColor: AppColors.whiteColor,
-                                onPress: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return const AddProductScreen();
-                                      },
-                                    ),
-                                  );
+                        return CustomButton(
+                          text: "Add Products in shop",
+                          bgColor: AppColors.primaryButtonColor,
+                          textColor: AppColors.whiteColor,
+                          onPress: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const AddProductScreen();
                                 },
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         );
                       } else {
                         return ListView.builder(
@@ -96,22 +100,30 @@ class _ShopDatabaseScreenState extends State<ShopDatabaseScreen> {
                           physics: const ClampingScrollPhysics(),
                           itemCount: products.length,
                           itemBuilder: (BuildContext context, int index) {
+                            Map<String, dynamic> myShopProductData =
+                                getMyShopProductData(
+                              allShops: products[index].shops,
+                              shopModel: shopModel,
+                            );
                             return Column(
                               children: [
                                 InkWell(
                                   onTap: () {
                                     showEditProductDialog(
-                                        context: context,
-                                        productName: products[index].name,
-                                        productQuantity: products[index]
-                                            .total_quantity
-                                            .toString(),
-                                        productUnitPrice: products[index]
-                                            .unit_price
-                                            .toString());
+                                      context: context,
+                                      productModel: products[index],
+                                      shopModel: shopModel,
+                                      productQuantity:
+                                          myShopProductData["quantity"],
+                                      productUnitPrice:
+                                          myShopProductData["shop_price"],
+                                    );
+
+                                    setState(() {});
                                   },
                                   child: ShopProductCard(
                                     productModel: products[index],
+                                    myShopProductData: myShopProductData,
                                   ),
                                 ),
                                 const SizedBox(height: 16),

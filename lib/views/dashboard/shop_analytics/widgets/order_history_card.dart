@@ -34,7 +34,7 @@ class OrderHistoryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${DateFormat('dd-MM-yyyy').format(orderModel.orderDeliveryTime)} | ${orderModel.customerName}",
+                    "${DateFormat('dd-MM-yyyy').format(orderModel.order_placing_time)} | ${orderModel.customer_name}",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
@@ -45,7 +45,7 @@ class OrderHistoryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${orderModel.paymentMode} | ${orderModel.customerPhone} ",
+                    "paymentMode | COD",
                     textAlign: TextAlign.start,
                     style: GoogleFonts.poppins(
                       color: AppColors.blackColor,
@@ -63,7 +63,7 @@ class OrderHistoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "Rs ${orderModel.orderAmount}",
+                  "Rs ${orderModel.total_amount}",
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w500,
                     fontSize: 13,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/pos_product_model.dart';
 
 class QrScanProductCard extends StatefulWidget {
-  final ProductModel productModel;
-  const QrScanProductCard({
+  POSProductModel productModel;
+  Function() notifyParent;
+  QrScanProductCard({
     super.key,
     required this.productModel,
+    required this.notifyParent,
   });
 
   @override
@@ -89,10 +91,11 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (widget.productModel.total_quantity > 0) {
-                            // setState(() {
-                            //   widget.productModel.total_quantity--;
-                            // });
+                          if (widget.productModel.quantity > 0) {
+                            setState(() {
+                              widget.productModel.quantity--;
+                            });
+                            widget.notifyParent;
                           }
                         },
                         child: Padding(
@@ -113,7 +116,7 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                           color: Colors.white,
                         ),
                         child: Text(
-                          widget.productModel.total_quantity.toString(),
+                          widget.productModel.quantity.toString(),
                           style: GoogleFonts.poppins(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -123,9 +126,10 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // setState(() {
-                          //   widget.productModel.total_quantity++;
-                          // });
+                          setState(() {
+                            widget.productModel.quantity++;
+                          });
+                          widget.notifyParent;
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),

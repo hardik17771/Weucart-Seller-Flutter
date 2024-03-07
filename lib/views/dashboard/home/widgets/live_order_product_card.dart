@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
 
 class LiveOrderProductCard extends StatelessWidget {
   final ProductModel productModel;
+  final int quantity;
+  final int shopPrice;
   const LiveOrderProductCard({
     super.key,
     required this.productModel,
+    required this.quantity,
+    required this.shopPrice,
   });
 
   @override
@@ -69,7 +73,7 @@ class LiveOrderProductCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "4.4",
+                            "4.4", // currently static
                             style: GoogleFonts.poppins(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
@@ -97,7 +101,7 @@ class LiveOrderProductCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15.5),
                 ),
                 child: Text(
-                  "${productModel.total_quantity} N",
+                  "$quantity N",
                   style: GoogleFonts.poppins(
                     fontSize: 7.5,
                     fontWeight: FontWeight.w500,
@@ -107,7 +111,7 @@ class LiveOrderProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                "Rs. ${productModel.total_quantity * productModel.unit_price}",
+                "Rs. ${quantity * shopPrice}",
                 style: GoogleFonts.poppins(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,

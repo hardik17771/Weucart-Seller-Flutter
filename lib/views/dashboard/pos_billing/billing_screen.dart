@@ -3,18 +3,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_document/open_document.dart';
 import 'package:weu_cart_seller/controllers/dashboard/pdf_invoice_controller.dart';
-import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/pos_product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/dashboard/pos_billing/widgets/billing_product_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_button.dart';
 import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class OfflineOrderBillingPage extends StatefulWidget {
-  final List<ProductModel> products;
+  final ShopModel shopModel;
+  final List<POSProductModel> products;
   const OfflineOrderBillingPage({
     super.key,
+    required this.shopModel,
     required this.products,
   });
 
@@ -24,22 +25,23 @@ class OfflineOrderBillingPage extends StatefulWidget {
 }
 
 class _OfflineOrderBillingPageState extends State<OfflineOrderBillingPage> {
-  final ShopController _shopController = ShopController();
+  final _formKey = GlobalKey<FormState>();
+
   final PdfInvoiceController pdfInvoiceController = PdfInvoiceController();
+
+  double totalAmount = 0;
+  int totalQuantity = 0;
   final TextEditingController _customerNameController = TextEditingController();
   final TextEditingController _customerPhoneNumberController =
       TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  double totalAmount = 0;
-  int totalQuantity = 0;
 
   @override
   void initState() {
     super.initState();
     for (int i = 0; i < widget.products.length; i++) {
-      totalQuantity += widget.products[i].total_quantity;
+      totalQuantity += widget.products[i].quantity;
       totalAmount +=
-          widget.products[i].unit_price * widget.products[i].total_quantity;
+          widget.products[i].unit_price * widget.products[i].quantity;
     }
   }
 
@@ -335,32 +337,31 @@ class _OfflineOrderBillingPageState extends State<OfflineOrderBillingPage> {
                 textColor: AppColors.whiteColor,
                 onPress: () async {
                   if (_formKey.currentState!.validate()) {
-                    ShopModel? shopModel =
-                        await _shopController.getLocalShopData();
+                    // ------------------- Generate pdf & save pdf ------------------------------->
 
-                    if (shopModel != null) {
-                      final data = await pdfInvoiceController.createInvoice(
-                        shopModel: shopModel,
-                        customerName: _customerNameController.text.trim(),
-                        customerPhone:
-                            _customerPhoneNumberController.text.trim(),
-                        products: widget.products,
-                      );
-                      String filePath = await pdfInvoiceController.savePdfFile(
-                        fileName:
-                            "invoice_${_customerPhoneNumberController.text.trim()}",
-                        byteList: data,
-                      );
+                    String invoiceId = DateTime.now().toIso8601String();
 
-                      // Open
-                      openPdfFile(filePath: filePath);
+                    final data = await pdfInvoiceController.createInvoice(
+                      invoiceId: invoiceId,
+                      shopModel: widget.shopModel,
+                      customerName: _customerNameController.text.trim(),
+                      customerPhone: _customerPhoneNumberController.text.trim(),
+                      products: widget.products,
+                    );
+                    String filePath = await pdfInvoiceController.savePdfFile(
+                      fileName: invoiceId,
+                      byteList: data,
+                    );
 
-                      // Share
-                      // sharePdfFileOnWhatsapp(
-                      //   phoneNumber: _customerPhoneNumberController.text.trim(),
-                      //   filePath: filePath,
-                      // );
-                    }
+                    // ----------------------- Open ----------------------------------->
+
+                    openPdfFile(filePath: filePath);
+
+                    // --------------------- Shareto whatsapp ------------------------>
+                    // sharePdfFileOnWhatsapp(
+                    //   phoneNumber: _customerPhoneNumberController.text.trim(),
+                    //   filePath: filePath,
+                    // );
                   }
                 },
               ),

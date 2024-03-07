@@ -37,10 +37,17 @@ class _PastOrderCardState extends State<PastOrderCard> {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 18,
-                backgroundImage: NetworkImage(
-                  AppConstants.defaultProfileImage,
+              Container(
+                height: 36,
+                width: 36,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.person,
+                  color: AppColors.greyColor,
                 ),
               ),
               const SizedBox(width: 8),
@@ -57,7 +64,7 @@ class _PastOrderCardState extends State<PastOrderCard> {
                     ),
                   ),
                   Text(
-                    widget.orderModel.customerName,
+                    widget.orderModel.customer_name,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       color: AppColors.blackColor,
@@ -66,7 +73,7 @@ class _PastOrderCardState extends State<PastOrderCard> {
                     ),
                   ),
                   Text(
-                    widget.orderModel.customerAddressModel.address,
+                    widget.orderModel.customer_current_address.address,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       color: AppColors.blackColor,
@@ -81,12 +88,12 @@ class _PastOrderCardState extends State<PastOrderCard> {
                 padding: const EdgeInsets.only(left: 4, right: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: (widget.orderModel.orderStatus == "Delivered")
+                  color: (widget.orderModel.status == "delivered")
                       ? AppColors.greenColor
                       : AppColors.redColor,
                 ),
                 child: Text(
-                  widget.orderModel.orderStatus,
+                  widget.orderModel.status,
                   style: GoogleFonts.poppins(
                     color: AppColors.whiteColor,
                     fontSize: 8,
@@ -110,7 +117,7 @@ class _PastOrderCardState extends State<PastOrderCard> {
                 ),
               ),
               Text(
-                "Rs ${widget.orderModel.orderAmount}",
+                "Rs ${widget.orderModel.total_amount}",
                 style: GoogleFonts.poppins(
                   color: AppColors.blackColor,
                   fontSize: 15,

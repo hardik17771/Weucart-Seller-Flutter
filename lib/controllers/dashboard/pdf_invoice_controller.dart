@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/pos_product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 
 class CustomRow {
@@ -25,7 +25,8 @@ class PdfInvoiceController {
     required ShopModel shopModel,
     required String customerName,
     required String customerPhone,
-    required List<ProductModel> products,
+    required List<POSProductModel> products,
+    required String invoiceId,
   }) async {
     final pdf = pw.Document();
 
@@ -39,9 +40,9 @@ class PdfInvoiceController {
       for (var product in products)
         CustomRow(
           name: product.name,
-          quantity: product.total_quantity.toString(),
+          quantity: product.quantity.toString(),
           unitPrice: product.unit_price.toString(),
-          totalPrice: "${product.total_quantity * product.unit_price}",
+          totalPrice: "${product.quantity * product.unit_price}",
         ),
       CustomRow(
         name: "Total Amount",
@@ -116,7 +117,7 @@ class PdfInvoiceController {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text("Invoice Number"),
-                      pw.Text("xxxxxx"),
+                      pw.Text(invoiceId),
                     ],
                   ),
                   pw.Column(
@@ -198,10 +199,10 @@ class PdfInvoiceController {
     return filePath;
   }
 
-  String getSubTotal(List<ProductModel> products) {
+  String getSubTotal(List<POSProductModel> products) {
     double total = 0.0;
     for (int i = 0; i < products.length; i++) {
-      total += products[i].unit_price * products[i].total_quantity;
+      total += products[i].unit_price * products[i].quantity;
     }
     return total.toStringAsFixed(2);
   }

@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/dummy_models.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/dashboard/shop_analytics/widgets/past_order_card.dart';
@@ -59,44 +58,40 @@ class _PastOrdersScreenState extends State<PastOrdersScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   ShopModel shopModel = snapshot.data!;
-                  return FutureBuilder(
-                    future:
-                        _orderController.getLiveOrders(shopModel: shopModel),
-                    builder: ((context, snapshot) {
+                  return FutureBuilder<List<OrderModel>>(
+                    future: _orderController.getShopOrdersByStatus(
+                      context: context,
+                      shopModel: shopModel,
+                      orderStatus: "past",
+                    ),
+                    builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        List<OrderModel> ordersList = snapshot.data!;
-                        if (ordersList.isEmpty) {
-                          return SizedBox(
-                            width: size.width,
-                            height: size.height,
-                            child: const Center(
-                              child: Text("No Orders"),
-                            ),
-                          );
+                        List<OrderModel> pastOrders = snapshot.data!;
+                        if (pastOrders.isEmpty) {
+                          return const SizedBox();
                         } else {
                           return ListView.builder(
                             shrinkWrap: true,
                             physics: const ClampingScrollPhysics(),
-                            itemCount: ordersList.length,
+                            itemCount: pastOrders.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  PastOrderCard(orderModel: ordersList[index]),
-                                  const SizedBox(height: 8),
-                                ],
+                              OrderModel orderModel = pastOrders[index];
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Order Details Page
+                                  },
+                                  child: PastOrderCard(orderModel: orderModel),
+                                ),
                               );
                             },
                           );
                         }
                       } else {
-                        return SizedBox(
-                          height: size.height,
-                          width: size.width,
-                          child: const CustomLoader(),
-                        );
+                        return const CustomLoader();
                       }
-                    }),
+                    },
                   );
                 } else {
                   return SizedBox(

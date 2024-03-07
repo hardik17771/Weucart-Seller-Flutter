@@ -13,9 +13,10 @@ import 'package:weu_cart_seller/views/app_info/faq_screen.dart';
 import 'package:weu_cart_seller/views/app_info/privacy_and_policy_screen.dart';
 import 'package:weu_cart_seller/views/app_info/terms_and_condition_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/shop_analytics/past_orders_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_card.dart';
+import 'package:weu_cart_seller/views/dashboard/shop_analytics/past_orders_screen.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,9 +26,53 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // late io.Socket socket;
   final SellerController _sellerController = SellerController();
   final ShopController _shopController = ShopController();
   final OrderController _orderController = OrderController();
+  List<String> liveOrderIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    connectToSocket();
+  }
+
+  void connectToSocket() {
+    // socket = io.io(
+    //   AppConstants.backendUrl,
+    //   <String, dynamic>{
+    //     'transports': ['websocket'],
+    //     'autoConnect': true,
+    //   },
+    // );
+
+    // socket.connect();
+    // socket.onConnect((_) {
+    //   debugPrint('Connected to the socket server');
+    // });
+    // socket.onDisconnect((_) {
+    //   debugPrint('Disconnected from the socket server');
+    // });
+
+    // socket.on('orderPlaced', (data) {
+    //   debugPrint('Received order id: $data');
+    //   setState(() {
+    //     liveOrderIds.add(data);
+    //   });
+    // });
+  }
+
+  @override
+  void dispose() {
+    // socket.disconnect();
+    // socket.dispose();
+    super.dispose();
+  }
+
+  refresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               ShopModel shopModel = snapshot.data!;
+              // debugPrint(liveOrderIds.toString());
+              debugPrint(shopModel.status.toString());
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,10 +137,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     );
                                   }),
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(
-                                        AppConstants.defaultProfileImage),
+                                  Container(
+                                    height: 36,
+                                    width: 36,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.person,
+                                      color: AppColors.greyColor,
+                                    ),
                                   ),
                                   const SizedBox(width: 8),
                                   Column(
@@ -120,49 +176,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: AppColors.whiteColor,
-                                      width: 1,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.greyColor,
-                                        offset: const Offset(0.0, 1.0),
-                                        blurRadius: 6.0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Online",
-                                          style: GoogleFonts.poppins(
-                                            color: AppColors.whiteColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Icon(
-                                          Icons.circle,
-                                          size: 28,
-                                          color: AppColors.whiteColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              Switch(
+                                activeColor: AppColors.whiteColor,
+                                activeTrackColor: AppColors.greenColor,
+                                value: (shopModel.status == "Online")
+                                    ? true
+                                    : false,
+                                onChanged: (value) async {
+                                  await _shopController.updateShopOnlineStatus(
+                                    context: context,
+                                    shopModel: shopModel,
+                                    status:
+                                        (value == true) ? "Online" : "Offline",
+                                  );
+
+                                  setState(() {});
+                                },
                               ),
                             ],
                           ),
@@ -199,6 +228,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Center(
+                            child: InkWell(
+                              onTap: () {
+                                refresh();
+                              },
+                              child: Icon(
+                                size: 28,
+                                Icons.refresh,
+                                color: AppColors.primaryButtonColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
                           Text(
                             "Live Orders",
                             style: GoogleFonts.poppins(
@@ -208,46 +250,41 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          FutureBuilder(
-                            future: _orderController.getLiveOrders(
-                                shopModel: shopModel),
-                            builder: ((context, snapshot) {
+                          FutureBuilder<List<OrderModel>>(
+                            future: _orderController.getShopOrdersByStatus(
+                              context: context,
+                              shopModel: shopModel,
+                              orderStatus: "current",
+                            ),
+                            builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                List<OrderModel> ordersList = snapshot.data!;
-                                if (ordersList.isEmpty) {
-                                  return SizedBox(
-                                    width: size.width,
-                                    height: size.height,
-                                    child: const Center(
-                                      child: Text("No Orders"),
-                                    ),
-                                  );
+                                List<OrderModel> currentOrders = snapshot.data!;
+                                if (currentOrders.isEmpty) {
+                                  return const SizedBox();
                                 } else {
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     physics: const ClampingScrollPhysics(),
-                                    itemCount: ordersList.length,
+                                    itemCount: currentOrders.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          LiveOrderCard(
-                                              orderModel: ordersList[index]),
-                                          const SizedBox(height: 8),
-                                        ],
+                                      OrderModel orderModel =
+                                          currentOrders[index];
+                                      return Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 16),
+                                        child: LiveOrderCard(
+                                          orderModel: orderModel,
+                                          notifyParent: refresh,
+                                        ),
                                       );
                                     },
                                   );
                                 }
                               } else {
-                                return SizedBox(
-                                  height: size.height,
-                                  width: size.width,
-                                  child: const CustomLoader(),
-                                );
+                                return const CustomLoader();
                               }
-                            }),
+                            },
                           ),
                           Container(
                             width: size.width,

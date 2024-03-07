@@ -4,37 +4,41 @@ import 'package:flutter/widgets.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/core/utils.dart';
-import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
-import 'package:weu_cart_seller/models/dummy_models.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/azure_product_mdoel.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 
 class ProductController {
   // ------------------------------------- Weucart Products ---------------------------------------->
 
-  Future<List<ProductModel>> getShopProducts({
-    required ShopModel shopModel,
-  }) async {
-    List<ProductModel> products = [];
-
-    products.add(dummmyProductModel);
-    products.add(dummmyProductModel);
-    products.add(dummmyProductModel);
-    products.add(dummmyProductModel);
-
-    return products;
-  }
-
-  Future<ProductModel?> getShopProductByISBN({
+  Future<ProductModel> getProductById({
+    required int productId,
     required BuildContext context,
-    required String productISBN,
   }) async {
     ProductModel? productModel;
 
-    // To be changed to API Call for searching products in this shop
-    productModel = dummmyProductModel;
+    try {
+      final response = await http.post(
+        Uri.parse("${AppConstants.backendUrl}/api/product-details"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"product_id": productId}),
+      );
 
-    return productModel;
+      var jsonData = json.decode(response.body);
+      var status_code = jsonData["status_code"];
+      var message = jsonData["message"];
+
+      if (status_code == 200) {
+        var dataMap = jsonData['data'];
+        productModel = ProductModel.fromMap(dataMap);
+      } else {
+        debugPrint("Product by ID $message");
+      }
+    } catch (e) {
+      debugPrint("Product by ID $e");
+    }
+
+    return productModel!;
   }
 
   Future<ProductModel?> getProductByISBN({
@@ -83,117 +87,207 @@ class ProductController {
 
   // ------------------------------------ Adding / Creating Product -------------------------------->
 
-  Future<void> addProductToShop({
+  Future<void> addWeucartProductToShop({
     required BuildContext context,
-    required ProductModel? weucartProductModel,
-    required AzureProductModel? azureProductModel,
+    required ProductModel weucartProductModel,
     required String productISBN,
-    required String price,
-    required String quantity,
+    required int price,
+    required int quantity,
   }) async {
     ShopModel shopModel = await ShopController().getLocalShopData();
 
-    /// Adding Existing WeucartDB Product to this Shop
-    if (weucartProductModel != null) {
-      try {
-        final url =
-            Uri.parse("${AppConstants.backendUrl}/api/add-products-to-shop");
-        final response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode({
-            "shop_id": shopModel.shop_id,
-            "products": [
-              {
-                "product_id": weucartProductModel.product_id,
-                "quantity": quantity,
-                "shop_price": price,
-              }
-            ]
-          }),
-        );
-
-        var jsonData = json.decode(response.body);
-        var statusCode = jsonData["status_code"];
-        var message = jsonData["message"];
-
-        if (statusCode == 200) {
-          debugPrint("Product Added to Shop");
-          showToast(text: "Product Added to shop");
-        } else {
-          // ignore: use_build_context_synchronously
-          showCustomDialog(
-            context: context,
-            title: "Internal Server Error",
-            message: message,
-          );
-        }
-      } catch (e) {
-        // ignore: use_build_context_synchronously
-        showCustomDialog(
-          context: context,
-          title: "Internal Server Error",
-          message: e.toString(),
-        );
-      }
-    } else {
-      /// Adding Creating New Product in Weucart Product DB from Azure Product
-      ProductModel newProductModel = ProductModel(
-        product_id: 0,
-        name: azureProductModel!.product,
-        added_by: "",
-        category_id: 2, // currently static
-        main_subcategory_id: 4, // currently static
-        mrp_price: azureProductModel.market_price,
-        description: azureProductModel.descriptionn,
-        shops: [
-          {
-            "latitude": shopModel.latitude,
-            "longitude": shopModel.longitude,
-            "shop_id": shopModel.shop_id,
-            "quantity": quantity,
-            "shop_price": price,
-            "images": []
-          }
-        ],
-        isbn: productISBN,
-        unit_price: int.parse(price),
-        total_quantity: 0,
-        num_of_sale: 0,
-        photos: [],
-        thumbnail_img: "",
+    try {
+      final url =
+          Uri.parse("${AppConstants.backendUrl}/api/add-products-to-shop");
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "shop_id": shopModel.shop_id,
+          "products": [
+            {
+              "product_id": weucartProductModel.product_id,
+              "quantity": quantity,
+              "shop_price": price,
+            }
+          ]
+        }),
       );
 
-      try {
-        final url = Uri.parse("${AppConstants.backendUrl}/api/create-product");
-        final response = await http.post(url,
-            headers: {"Content-Type": "application/json"},
-            body: newProductModel.toJson());
+      var jsonData = json.decode(response.body);
+      var statusCode = jsonData["status_code"];
+      var message = jsonData["message"];
 
-        var jsonData = json.decode(response.body);
-        var statusCode = jsonData["status_code"];
-        var message = jsonData["message"];
-
-        if (statusCode == 200) {
-          debugPrint("Product Created in DB and Added to Shop");
-
-          showToast(text: "Product Added to shop");
-        } else {
-          // ignore: use_build_context_synchronously
-          showCustomDialog(
-            context: context,
-            title: "Internal Server Error",
-            message: message,
-          );
-        }
-      } catch (e) {
+      if (statusCode == 200) {
+        debugPrint("Product Added to Shop");
+        showToast(text: "Product Added to shop");
+      } else {
         // ignore: use_build_context_synchronously
         showCustomDialog(
           context: context,
           title: "Internal Server Error",
-          message: e.toString(),
+          message: message,
         );
       }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showCustomDialog(
+        context: context,
+        title: "Internal Server Error",
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<void> addAzureProductToShop({
+    required BuildContext context,
+    required String productISBN,
+    required AzureProductModel azureProductModel,
+    required String price,
+    required String quantity,
+    required int category_id,
+    required int main_subcategory_id,
+    required String imageUrl,
+  }) async {
+    ShopModel shopModel = await ShopController().getLocalShopData();
+
+    ProductModel newProductModel = ProductModel(
+      product_id: 0, // will be generated by weucart backend
+      name: azureProductModel.product,
+      added_by: "",
+      category_id: category_id,
+      main_subcategory_id: main_subcategory_id,
+      mrp_price: azureProductModel.market_price,
+      description: azureProductModel.descriptionn,
+      shops: [
+        {
+          "latitude": shopModel.latitude,
+          "longitude": shopModel.longitude,
+          "shop_id": shopModel.shop_id,
+          "quantity": quantity,
+          "shop_price": price,
+          "images": [imageUrl]
+        }
+      ],
+      isbn: productISBN,
+      unit_price: int.parse(price),
+      total_quantity: 0, // initial
+      num_of_sale: 0, // initial
+      photos: [imageUrl],
+      thumbnail_img: imageUrl,
+      rating: "4.4",
+      reviews: [],
+      shop_with_least_price: {},
+      shop_with_second_least_price: {},
+      shop_with_maximum_quantity: {},
+    );
+
+    try {
+      final url = Uri.parse("${AppConstants.backendUrl}/api/create-product");
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: newProductModel.toJson());
+
+      var jsonData = json.decode(response.body);
+      var statusCode = jsonData["status_code"];
+      var message = jsonData["message"];
+
+      if (statusCode == 200) {
+        debugPrint("Product Created in DB and Added to Shop");
+
+        showToast(text: "Product Added to shop");
+      } else {
+        // ignore: use_build_context_synchronously
+        showCustomDialog(
+          context: context,
+          title: "Internal Server Error",
+          message: message,
+        );
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showCustomDialog(
+        context: context,
+        title: "Internal Server Error",
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<void> addManualProductToShop({
+    required BuildContext context,
+    required String productISBN,
+    required String name,
+    required String description,
+    required int unit_price,
+    required int market_price,
+    required int quantity,
+    required int category_id,
+    required int main_subcategory_id,
+    required String imageUrl,
+  }) async {
+    ShopModel shopModel = await ShopController().getLocalShopData();
+
+    ProductModel newProductModel = ProductModel(
+      product_id: 0, // will be generated by weucart backend
+      name: name,
+      added_by: "",
+      category_id: category_id,
+      main_subcategory_id: main_subcategory_id,
+      mrp_price: market_price,
+      description: description,
+      shops: [
+        {
+          "latitude": shopModel.latitude,
+          "longitude": shopModel.longitude,
+          "shop_id": shopModel.shop_id,
+          "quantity": quantity,
+          "shop_price": unit_price,
+          "images": [imageUrl]
+        }
+      ],
+      isbn: productISBN,
+      unit_price: unit_price,
+      total_quantity: 0, // initial
+      num_of_sale: 0, // initial
+      photos: [imageUrl],
+      thumbnail_img: imageUrl,
+      rating: "4.4",
+      reviews: [],
+      shop_with_least_price: {},
+      shop_with_second_least_price: {},
+      shop_with_maximum_quantity: {},
+    );
+
+    try {
+      final url = Uri.parse("${AppConstants.backendUrl}/api/create-product");
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: newProductModel.toJson());
+
+      var jsonData = json.decode(response.body);
+      var statusCode = jsonData["status_code"];
+      var message = jsonData["message"];
+
+      if (statusCode == 200) {
+        debugPrint("Product Created in DB and Added to Shop");
+
+        showToast(text: "Product Added to shop");
+      } else {
+        // ignore: use_build_context_synchronously
+        showCustomDialog(
+          context: context,
+          title: "Internal Server Error",
+          message: message,
+        );
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showCustomDialog(
+        context: context,
+        title: "Internal Server Error",
+        message: e.toString(),
+      );
     }
   }
 
@@ -215,12 +309,12 @@ class ProductController {
       );
 
       var jsonData = json.decode(response.body);
-      // var statusCode = jsonData["status_code"];
-      // var message = jsonData["message"];
+      var message = jsonData["message"];
+      var statusCode = jsonData["status_code"];
 
-      if (response.statusCode == 200) {
-        var dataMap = jsonData.cast<Map<String, dynamic>>();
-        debugPrint(dataMap.toString());
+      if (statusCode == 200) {
+        var dataMap = jsonData["data"].cast<Map<String, dynamic>>();
+        // debugPrint(dataMap.toString());
 
         products = dataMap
             .map<AzureProductModel>((e) => AzureProductModel.fromMap(e))
@@ -230,7 +324,7 @@ class ProductController {
         showCustomDialog(
           context: context,
           title: "Internal Server Error",
-          message: "Unable to fetch the products name suggestions ",
+          message: message,
         );
       }
     } catch (e) {
@@ -241,23 +335,6 @@ class ProductController {
         message: e.toString(),
       );
     }
-
-    return products;
-  }
-
-  Future<AzureProductModel?> searchAzureProductById({
-    required BuildContext context,
-    required String id,
-  }) async {
-    AzureProductModel? product;
-
-    return product;
-  }
-
-  Future<List<AzureProductModel>> readAllAzureProducts({
-    required BuildContext context,
-  }) async {
-    List<AzureProductModel> products = [];
 
     return products;
   }

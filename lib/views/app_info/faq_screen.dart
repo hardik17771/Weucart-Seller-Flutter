@@ -1,7 +1,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:weu_cart_seller/controllers/dashboard/app_info_controller.dart';
+import 'package:weu_cart_seller/controllers/app_info_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/app_info/faq_model.dart';
 import 'package:weu_cart_seller/views/app_info/widgets/faq_card.dart';

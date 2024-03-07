@@ -18,10 +18,6 @@ class ShopAnalyticsScreen extends StatefulWidget {
 class _ShopAnalyticsScreenState extends State<ShopAnalyticsScreen> {
   final ShopController _shopController = ShopController();
   final OrderController _orderController = OrderController();
-  int _totalOrderCount = 180;
-  int _dailyOrderCount = 15;
-  double _totalSalesAmount = 150900;
-  double _dailySalesAmount = 3090;
 
   @override
   Widget build(BuildContext context) {
@@ -95,192 +91,295 @@ class _ShopAnalyticsScreenState extends State<ShopAnalyticsScreen> {
                             ),
                             const SizedBox(height: 16),
                             Container(
-                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: AppColors.secondryContainerColor,
                               ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Total Orders",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: AppColors.blackColor,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 20,
-                                              right: 20,
-                                              top: 4,
-                                              bottom: 4),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryButtonColor,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            _totalOrderCount.toString(),
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 13,
-                                              color: AppColors.whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Divider(
-                                          thickness: 1,
+                              child: FutureBuilder(
+                                  future: _shopController.getShopAnalytics(
+                                    context: context,
+                                    shop_id: shopModel.shop_id,
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      Map<String, dynamic> shopAnalytics =
+                                          snapshot.data!;
+
+                                      // debugPrint(shopAnalytics.toString());
+
+                                      return Table(
+                                        border: TableBorder.all(
                                           color: AppColors.greyColor,
                                         ),
-                                        Text(
-                                          "Daily Orders",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: AppColors.blackColor,
+                                        children: [
+                                          TableRow(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Total Orders",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 13,
+                                                        color: AppColors
+                                                            .blackColor,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20,
+                                                              right: 20,
+                                                              top: 4,
+                                                              bottom: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors
+                                                            .primaryButtonColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      child: Text(
+                                                        shopAnalytics[
+                                                                "numAllOrders"]
+                                                            .toString(),
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: AppColors
+                                                              .whiteColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Daily Orders",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 13,
+                                                        color: AppColors
+                                                            .blackColor,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20,
+                                                              right: 20,
+                                                              top: 4,
+                                                              bottom: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors
+                                                            .primaryButtonColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      child: Text(
+                                                        shopAnalytics[
+                                                                "numOrdersPastDay"]
+                                                            .toString(),
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: AppColors
+                                                              .whiteColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 20,
-                                              right: 20,
-                                              top: 4,
-                                              bottom: 4),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryButtonColor,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
+                                          TableRow(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Total Collection",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 13,
+                                                        color: AppColors
+                                                            .blackColor,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20,
+                                                              right: 20,
+                                                              top: 4,
+                                                              bottom: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors
+                                                            .primaryButtonColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      child: Text(
+                                                        "Rs ${shopAnalytics["totalAllOrdersAmount"]}",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: AppColors
+                                                              .whiteColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Daily Collection",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 13,
+                                                        color: AppColors
+                                                            .blackColor,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20,
+                                                              right: 20,
+                                                              top: 4,
+                                                              bottom: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors
+                                                            .primaryButtonColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      child: Text(
+                                                        "Rs ${shopAnalytics["totalOrdersPastDayAmount"]}",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: AppColors
+                                                              .whiteColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          child: Text(
-                                            _dailyOrderCount.toString(),
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 13,
-                                              color: AppColors.whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Total Collection",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: AppColors.blackColor,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 20,
-                                              right: 20,
-                                              top: 4,
-                                              bottom: 4),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryButtonColor,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            "Rs $_totalSalesAmount",
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 13,
-                                              color: AppColors.whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Divider(
-                                          thickness: 1,
-                                          color: AppColors.greyColor,
-                                        ),
-                                        Text(
-                                          "Daily Collection",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: AppColors.blackColor,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 20,
-                                              right: 20,
-                                              top: 4,
-                                              bottom: 4),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryButtonColor,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            "Rs $_dailySalesAmount",
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 13,
-                                              color: AppColors.whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                        ],
+                                      );
+                                    } else {
+                                      return const CustomLoader();
+                                    }
+                                  }),
                             ),
                             const SizedBox(height: 24),
-                            FutureBuilder(
-                              future: _orderController.getPastOrders(
-                                  shopModel: shopModel),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
+                            FutureBuilder<List<OrderModel>>(
+                              future: _orderController.getShopOrdersByStatus(
+                                context: context,
+                                shopModel: shopModel,
+                                orderStatus: "past",
+                              ),
+                              builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  List<OrderModel> orders = snapshot.data!;
-                                  if (orders.isEmpty) {
-                                    return SizedBox(
-                                        height: size.height,
-                                        width: size.width,
-                                        child: const Text("No Orders"));
+                                  List<OrderModel> pastOrders = snapshot.data!;
+                                  if (pastOrders.isEmpty) {
+                                    return const SizedBox();
                                   } else {
                                     return ListView.builder(
                                       shrinkWrap: true,
                                       physics: const ClampingScrollPhysics(),
-                                      itemCount: orders.length,
+                                      itemCount: pastOrders.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        return Column(
-                                          children: [
-                                            OrderHistoryCard(
-                                                orderModel: orders[index]),
-                                            const SizedBox(height: 12),
-                                          ],
+                                        OrderModel orderModel =
+                                            pastOrders[index];
+                                        return Container(
+                                          margin:
+                                              const EdgeInsets.only(bottom: 16),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // Order Details Page
+                                            },
+                                            child: OrderHistoryCard(
+                                                orderModel: orderModel),
+                                          ),
                                         );
                                       },
                                     );
                                   }
                                 } else {
-                                  return SizedBox(
-                                    height: size.height,
-                                    width: size.width,
-                                    child: const CustomLoader(),
-                                  );
+                                  return const CustomLoader();
                                 }
                               },
                             ),

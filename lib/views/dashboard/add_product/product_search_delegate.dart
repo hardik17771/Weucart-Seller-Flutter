@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/azure_product_mdoel.dart';
+import 'package:weu_cart_seller/models/product/azure_product_mdoel.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class ProductSearchDelegate extends SearchDelegate<AzureProductModel> {

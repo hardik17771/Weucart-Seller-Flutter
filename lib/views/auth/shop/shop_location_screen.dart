@@ -371,6 +371,9 @@ class _ShopLocationScreenState extends State<ShopLocationScreen> {
                         twitter: "",
                         youtube: "",
                         instagram: "",
+                        sold_products: [],
+                        no_of_products: 0,
+                        is_gst_code: true,
                       );
 
                       // ignore: use_build_context_synchronously

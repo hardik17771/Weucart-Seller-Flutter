@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
 
 class ShopProductCard extends StatelessWidget {
+  final Map<String, dynamic> myShopProductData;
   final ProductModel productModel;
   const ShopProductCard({
     super.key,
     required this.productModel,
+    required this.myShopProductData,
   });
 
   @override
@@ -76,7 +78,7 @@ class ShopProductCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "4.4",
+                            "4.4", // static currently
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 10,
@@ -88,7 +90,7 @@ class ShopProductCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "${productModel.total_quantity} N",
+                        "${myShopProductData["quantity"]} N",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 13,
@@ -106,7 +108,7 @@ class ShopProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "Rs. ${productModel.unit_price}",
+                "Rs. ${myShopProductData["shop_price"]}",
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   fontSize: 15,

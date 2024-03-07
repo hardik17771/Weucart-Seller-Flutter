@@ -61,6 +61,8 @@ dependencies:
   open_document: ^1.0.7
   whatsapp_share2: ^2.0.2
   easy_search_bar: ^2.5.0
+  socket_io_client: ^2.0.3+1
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:

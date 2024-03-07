@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weu_cart_seller/controllers/dashboard/shop_database_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
+import 'package:weu_cart_seller/models/shop_model.dart';
+import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
 
 void showEditProductDialog({
   required BuildContext context,
-  required String productName,
-  required String productQuantity,
-  required String productUnitPrice,
+  required ProductModel productModel,
+  required ShopModel shopModel,
+  required int productQuantity,
+  required int productUnitPrice,
 }) {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _quantityController =
-      TextEditingController(text: productQuantity);
+      TextEditingController(text: productQuantity.toString());
   TextEditingController _priceController =
-      TextEditingController(text: productUnitPrice);
+      TextEditingController(text: productUnitPrice.toString());
+  final ShopDatabaseController _shopDatabaseController =
+      ShopDatabaseController();
 
   showDialog(
     context: context,
@@ -24,7 +31,7 @@ void showEditProductDialog({
             borderRadius: BorderRadius.circular(15),
           ),
           title: Text(
-            productName,
+            productModel.name,
             style: GoogleFonts.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -153,10 +160,26 @@ void showEditProductDialog({
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // Edit Shop Product API Call
+                    onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        debugPrint("Edit product");
+                        await _shopDatabaseController.updateShopProductData(
+                          context: context,
+                          shopModel: shopModel,
+                          productModel: productModel,
+                          updatedPrice: int.parse(_priceController.text.trim()),
+                          updatedQuantity:
+                              int.parse(_quantityController.text.trim()),
+                        );
+
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const DashboardScreen(pageIndex: 4);
+                            },
+                          ),
+                          (route) => false,
+                        );
                       }
                     },
                     child: Container(

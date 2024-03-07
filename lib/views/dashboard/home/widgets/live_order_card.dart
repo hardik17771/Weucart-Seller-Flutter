@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
+import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
+import 'package:weu_cart_seller/models/product/product_model.dart';
 import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_product_card.dart';
+import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class LiveOrderCard extends StatefulWidget {
+  final Function() notifyParent;
   final OrderModel orderModel;
   const LiveOrderCard({
     super.key,
+    required this.notifyParent,
     required this.orderModel,
   });
 
@@ -17,6 +22,9 @@ class LiveOrderCard extends StatefulWidget {
 }
 
 class _LiveOrderCardState extends State<LiveOrderCard> {
+  final ProductController _productController = ProductController();
+  final OrderController _orderController = OrderController();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -55,10 +63,17 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 18,
-                        backgroundImage: NetworkImage(
-                          AppConstants.defaultProfileImage,
+                      Container(
+                        height: 36,
+                        width: 36,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.person,
+                          color: AppColors.greyColor,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -75,7 +90,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                             ),
                           ),
                           Text(
-                            widget.orderModel.customerName,
+                            widget.orderModel.customer_name,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: AppColors.blackColor,
@@ -84,7 +99,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                             ),
                           ),
                           Text(
-                            widget.orderModel.customerAddressModel.address,
+                            widget.orderModel.customer_current_address.address,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: AppColors.blackColor,
@@ -110,7 +125,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                         ),
                       ),
                       Text(
-                        "Rs ${widget.orderModel.orderAmount}",
+                        "Rs ${widget.orderModel.total_amount}",
                         style: GoogleFonts.poppins(
                           color: AppColors.blackColor,
                           fontSize: 15,
@@ -125,33 +140,220 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      color: AppColors.tertiaryContainerColor,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: widget.orderModel.products.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return LiveOrderProductCard(
-                            productModel: widget.orderModel.products[index],
-                          );
-                        },
+                    const SizedBox(height: 4),
+
+                    // ----------------------- Grocery Products ----------------------------------- >
+                    if (widget.orderModel.grocery_cart_products.isNotEmpty)
+                      Column(
+                        children: [
+                          Text(
+                            "Groceries",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: AppColors.primaryButtonColor,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          ListView(
+                            shrinkWrap: true,
+                            children: widget
+                                .orderModel.grocery_cart_products.keys
+                                .map<Widget>((key) {
+                              List<dynamic> shopProductsList =
+                                  widget.orderModel.grocery_cart_products[key];
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: shopProductsList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Map<String, dynamic> currentShopProduct =
+                                      shopProductsList[index];
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      FutureBuilder<ProductModel>(
+                                          future:
+                                              _productController.getProductById(
+                                            context: context,
+                                            productId: currentShopProduct[
+                                                "product_id"],
+                                          ),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              ProductModel currentProductModel =
+                                                  snapshot.data!;
+
+                                              return LiveOrderProductCard(
+                                                productModel:
+                                                    currentProductModel,
+                                                shopPrice: currentShopProduct[
+                                                    "shop_price"],
+                                                quantity: currentShopProduct[
+                                                    "quantity"],
+                                              );
+                                            } else {
+                                              return const CustomLoader();
+                                            }
+                                          }),
+                                      const SizedBox(height: 12),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Container(
+                    // ----------------------- Other Cart Products ----------------------------------- >
+                    if (widget.orderModel.cart_products.isNotEmpty)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Other Categories",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: AppColors.primaryButtonColor,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          ListView(
+                            shrinkWrap: true,
+                            children: widget.orderModel.cart_products.keys
+                                .map<Widget>((key) {
+                              List<dynamic> shopProductsList =
+                                  widget.orderModel.cart_products[key];
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: shopProductsList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Map<String, dynamic> currentShopProduct =
+                                      shopProductsList[index];
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      FutureBuilder<ProductModel>(
+                                          future:
+                                              _productController.getProductById(
+                                            context: context,
+                                            productId: currentShopProduct[
+                                                "product_id"],
+                                          ),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              ProductModel currentProductModel =
+                                                  snapshot.data!;
+
+                                              return LiveOrderProductCard(
+                                                productModel:
+                                                    currentProductModel,
+                                                shopPrice: currentShopProduct[
+                                                    "shopProductsAmount"],
+                                                quantity: currentShopProduct[
+                                                    "quantity"],
+                                              );
+                                            } else {
+                                              return const CustomLoader();
+                                            }
+                                          }),
+                                      const SizedBox(height: 12),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+
+                    (widget.orderModel.is_accepted == "pending")
+                        ? Row(
+                            children: [
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    await _orderController
+                                        .updateOrderAcceptanceStatus(
+                                      orderModel: widget.orderModel,
+                                      isAccepted: "declined",
+                                    );
+
+                                    widget.notifyParent();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondryButtonColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.only(
+                                        top: 4, bottom: 4),
+                                    child: Center(
+                                      child: Text(
+                                        "Reject",
+                                        style: GoogleFonts.poppins(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    await _orderController
+                                        .updateOrderAcceptanceStatus(
+                                      orderModel: widget.orderModel,
+                                      isAccepted: "accepted",
+                                    );
+
+                                    widget.notifyParent();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.greenColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.only(
+                                        top: 4, bottom: 4),
+                                    child: Center(
+                                      child: Text(
+                                        "Accept",
+                                        style: GoogleFonts.poppins(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                          )
+                        : Container(
                             decoration: BoxDecoration(
-                              color: AppColors.secondryButtonColor,
+                              color: widget.orderModel.is_accepted == "accepted"
+                                  ? AppColors.greenColor
+                                  : AppColors.secondryButtonColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             padding: const EdgeInsets.only(top: 4, bottom: 4),
                             child: Center(
                               child: Text(
-                                "Reject",
+                                widget.orderModel.is_accepted,
                                 style: GoogleFonts.poppins(
                                   color: AppColors.whiteColor,
                                   fontSize: 15,
@@ -160,30 +362,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.greenColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Center(
-                              child: Text(
-                                "Accept",
-                                style: GoogleFonts.poppins(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
+                    const SizedBox(height: 4),
                   ],
                 ),
               ],

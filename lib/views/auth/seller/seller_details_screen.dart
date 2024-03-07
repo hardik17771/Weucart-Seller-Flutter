@@ -188,8 +188,7 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                                           email: _emailIdController.text.trim(),
                                           phone: widget.user.phoneNumber!,
                                           deviceToken: "1",
-                                          profileImage:
-                                              AppConstants.defaultProfileImage,
+                                          profileImage: "",
                                           shops_owned: [],
                                         );
 

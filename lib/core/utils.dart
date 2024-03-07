@@ -1,27 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-
-// class ShowLoader {
-//   show(BuildContext context) {
-//     return Loader.show(
-//       context,
-//       isSafeAreaOverlay: false,
-//       isAppbarOverlay: true,
-//       isBottomBarOverlay: true,
-//       overlayColor: Colors.transparent,
-//       progressIndicator: CircularProgressIndicator(),
-//       themeData: Theme.of(context).copyWith(
-//         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
-//       ),
-//     );
-//   }
-
-//   dismiss() {
-//     Loader.hide();
-//   }
-// }
 
 void showCustomDialog(
     {required BuildContext context,
@@ -97,4 +80,17 @@ extension EmailValidator on String {
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(this);
   }
+}
+
+Future<File?> pickImage() async {
+  File? pickerImage;
+  try {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      pickerImage = File(image.path);
+    }
+  } on PlatformException catch (e) {
+    debugPrint(e.toString());
+  }
+  return pickerImage;
 }

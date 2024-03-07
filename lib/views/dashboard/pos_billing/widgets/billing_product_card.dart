@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/models/product_model.dart';
+import 'package:weu_cart_seller/models/product/pos_product_model.dart';
 
 class BillingProductCard extends StatefulWidget {
-  final ProductModel productModel;
+  final POSProductModel productModel;
   const BillingProductCard({
     super.key,
     required this.productModel,
@@ -59,7 +59,7 @@ class _BillingProductCardState extends State<BillingProductCard> {
                 ),
               ),
               child: Text(
-                widget.productModel.total_quantity.toString(),
+                "${widget.productModel.quantity}",
                 style: GoogleFonts.poppins(
                   color: AppColors.blackColor,
                   fontSize: 10,
@@ -98,7 +98,7 @@ class _BillingProductCardState extends State<BillingProductCard> {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 textAlign: TextAlign.center,
-                "${widget.productModel.unit_price * widget.productModel.total_quantity}",
+                "${widget.productModel.unit_price * widget.productModel.quantity}",
                 style: GoogleFonts.poppins(
                   color: AppColors.blackColor,
                   fontSize: 10,
