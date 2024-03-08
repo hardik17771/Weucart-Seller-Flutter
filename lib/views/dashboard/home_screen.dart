@@ -13,8 +13,8 @@ import 'package:weu_cart_seller/views/app_info/faq_screen.dart';
 import 'package:weu_cart_seller/views/app_info/privacy_and_policy_screen.dart';
 import 'package:weu_cart_seller/views/app_info/terms_and_condition_screen.dart';
 import 'package:weu_cart_seller/views/dashboard/dashboard_screen.dart';
-import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_card.dart';
-import 'package:weu_cart_seller/views/dashboard/shop_analytics/past_orders_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/orders/widgets/live_order_card.dart';
+import 'package:weu_cart_seller/views/dashboard/orders/past_orders_screen.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 

@@ -5,7 +5,7 @@ import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/product/product_model.dart';
-import 'package:weu_cart_seller/views/dashboard/home/widgets/live_order_product_card.dart';
+import 'package:weu_cart_seller/views/dashboard/orders/widgets/order_product_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class LiveOrderCard extends StatefulWidget {
@@ -185,7 +185,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                                               ProductModel currentProductModel =
                                                   snapshot.data!;
 
-                                              return LiveOrderProductCard(
+                                              return OrderProductCard(
                                                 productModel:
                                                     currentProductModel,
                                                 shopPrice: currentShopProduct[
@@ -251,7 +251,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                                               ProductModel currentProductModel =
                                                   snapshot.data!;
 
-                                              return LiveOrderProductCard(
+                                              return OrderProductCard(
                                                 productModel:
                                                     currentProductModel,
                                                 shopPrice: currentShopProduct[
@@ -318,6 +318,12 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                                       isAccepted: "accepted",
                                     );
 
+                                    await _orderController
+                                        .updateOrderCurrentStatus(
+                                      orderModel: widget.orderModel,
+                                      status: "acceptedByShop",
+                                    );
+
                                     widget.notifyParent();
                                   },
                                   child: Container(
@@ -343,25 +349,72 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                               const SizedBox(width: 8),
                             ],
                           )
-                        : Container(
-                            decoration: BoxDecoration(
-                              color: widget.orderModel.is_accepted == "accepted"
-                                  ? AppColors.greenColor
-                                  : AppColors.secondryButtonColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Center(
-                              child: Text(
-                                widget.orderModel.is_accepted,
-                                style: GoogleFonts.poppins(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
+                        : (widget.orderModel.is_accepted == "decilned")
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.secondryButtonColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding:
+                                    const EdgeInsets.only(top: 4, bottom: 4),
+                                child: Center(
+                                  child: Text(
+                                    widget.orderModel.is_accepted,
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.whiteColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : InkWell(
+                                onTap: () async {
+                                  if (widget.orderModel.status == "delivered") {
+                                    debugPrint("Order Delivered Already");
+                                  } else {
+                                    await _orderController
+                                        .updateOrderCurrentStatus(
+                                      orderModel: widget.orderModel,
+                                      status: (widget.orderModel.status ==
+                                              "acceptedByShop")
+                                          ? "readyToPickup"
+                                          : (widget.orderModel.status ==
+                                                  "readyToPickup")
+                                              ? "delivered"
+                                              : "",
+                                    );
+                                  }
+                                  widget.notifyParent();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: (widget.orderModel.status ==
+                                            "delivered")
+                                        ? AppColors.primaryButtonColor
+                                        : AppColors.greenColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.only(top: 4, bottom: 4),
+                                  child: Center(
+                                    child: Text(
+                                      (widget.orderModel.status ==
+                                              "acceptedByShop")
+                                          ? "readyToPickup"
+                                          : (widget.orderModel.status ==
+                                                  "readyToPickup")
+                                              ? "delivered"
+                                              : widget.orderModel.status,
+                                      style: GoogleFonts.poppins(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
                     const SizedBox(height: 4),
                   ],
                 ),

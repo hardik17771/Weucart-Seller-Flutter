@@ -20,10 +20,10 @@ class CategoryController {
 
       if (response.body.isNotEmpty) {
         var jsonData = json.decode(response.body);
-        var status_code = jsonData["status_code"];
+        var statusCode = jsonData["status_code"];
         var message = jsonData["message"];
 
-        if (status_code == 200) {
+        if (statusCode == 200) {
           var dataMap = jsonData['list'].cast<Map<String, dynamic>>();
 
           mainCategorys = dataMap

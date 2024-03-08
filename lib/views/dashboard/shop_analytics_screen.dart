@@ -5,7 +5,8 @@ import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
-import 'package:weu_cart_seller/views/dashboard/shop_analytics/widgets/order_history_card.dart';
+import 'package:weu_cart_seller/views/dashboard/orders/order_details_screen.dart';
+import 'package:weu_cart_seller/views/dashboard/orders/widgets/order_history_card.dart';
 import 'package:weu_cart_seller/views/widgets/custom_loader.dart';
 
 class ShopAnalyticsScreen extends StatefulWidget {
@@ -369,7 +370,14 @@ class _ShopAnalyticsScreenState extends State<ShopAnalyticsScreen> {
                                               const EdgeInsets.only(bottom: 16),
                                           child: GestureDetector(
                                             onTap: () {
-                                              // Order Details Page
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return OrderDetailsScreen(
+                                                        orderModel: orderModel);
+                                                  },
+                                                ),
+                                              );
                                             },
                                             child: OrderHistoryCard(
                                                 orderModel: orderModel),

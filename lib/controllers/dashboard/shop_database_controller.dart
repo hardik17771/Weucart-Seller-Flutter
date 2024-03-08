@@ -41,13 +41,14 @@ class ShopDatabaseController {
     return shopProductsList;
   }
 
-  Future<void> updateShopProductData({
+  Future<bool> updateShopProductData({
     required BuildContext context,
     required ShopModel shopModel,
-    required ProductModel productModel,
+    required int productId,
     required int updatedQuantity,
     required int updatedPrice,
   }) async {
+    bool isUpdated = false;
     try {
       final url =
           Uri.parse("${AppConstants.backendUrl}/api/update-products-of-shop");
@@ -58,7 +59,7 @@ class ShopDatabaseController {
           "shop_id": shopModel.shop_id,
           "products": [
             {
-              "product_id": productModel.product_id,
+              "product_id": productId,
               "quantity": updatedQuantity,
               "shop_price": updatedPrice,
             }
@@ -71,6 +72,7 @@ class ShopDatabaseController {
       var message = jsonData["message"];
 
       if (statusCode == 200) {
+        isUpdated = true;
         debugPrint("Product Data Updated");
       } else {
         // ignore: use_build_context_synchronously
@@ -88,6 +90,8 @@ class ShopDatabaseController {
         message: e.toString(),
       );
     }
+
+    return isUpdated;
   }
 
   // -------------------- POS ----------------------------------->

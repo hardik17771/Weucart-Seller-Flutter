@@ -103,7 +103,7 @@ class OrderController {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse("${AppConstants.backendUrl}/api/upadate-order-status"),
+        Uri.parse("${AppConstants.backendUrl}/api/update-order-status"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           'order_id': orderModel.order_id,
@@ -112,10 +112,10 @@ class OrderController {
       );
 
       var jsonData = json.decode(response.body);
-      var status_code = jsonData["status_code"];
+      var statusCode = jsonData["status_code"];
       var message = jsonData["message"];
 
-      if (status_code == 200) {
+      if (statusCode == 200) {
         var dataMap = jsonData['data'];
 
         showToast(text: "Order Status Updated");

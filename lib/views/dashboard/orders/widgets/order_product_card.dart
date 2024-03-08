@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/models/product/product_model.dart';
 
-class LiveOrderProductCard extends StatelessWidget {
+class OrderProductCard extends StatelessWidget {
   final ProductModel productModel;
   final int quantity;
   final int shopPrice;
-  const LiveOrderProductCard({
+  const OrderProductCard({
     super.key,
     required this.productModel,
     required this.quantity,

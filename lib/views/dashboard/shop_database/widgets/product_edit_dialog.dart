@@ -165,7 +165,7 @@ void showEditProductDialog({
                         await _shopDatabaseController.updateShopProductData(
                           context: context,
                           shopModel: shopModel,
-                          productModel: productModel,
+                          productId: productModel.product_id,
                           updatedPrice: int.parse(_priceController.text.trim()),
                           updatedQuantity:
                               int.parse(_quantityController.text.trim()),
