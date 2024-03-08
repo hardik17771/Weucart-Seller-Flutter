@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8),
                             child: Text(
-                              "You have 5 new orders!",
+                              "You may have new orders!",
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
