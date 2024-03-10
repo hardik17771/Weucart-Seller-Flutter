@@ -67,9 +67,12 @@ class _VeriflyPhoneOTPScreenState extends State<VeriflyPhoneOTPScreen> {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91${widget.phoneNumber}',
         verificationCompleted: (PhoneAuthCredential credential) async {
+          debugPrint("OTP Auth Start");
+
           await FirebaseAuth.instance
               .signInWithCredential(credential)
               .then((value) async {
+            debugPrint("OTP Auth End");
             // -------------------- Check User Data Existence in db ------------------------------------>
             User? currentUser = value.user;
             if (currentUser != null) {
@@ -77,6 +80,8 @@ class _VeriflyPhoneOTPScreenState extends State<VeriflyPhoneOTPScreen> {
                 sellerUid: currentUser.uid,
                 context: context,
               );
+
+              debugPrint("Seller API Call end");
 
               if (sellerModel != null) {
                 _navigateToShopsDashboard();
