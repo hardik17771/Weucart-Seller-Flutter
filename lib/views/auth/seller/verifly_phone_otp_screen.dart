@@ -88,6 +88,7 @@ class _VeriflyPhoneOTPScreenState extends State<VeriflyPhoneOTPScreen> {
         },
         verificationFailed: (FirebaseAuthException e) {
           debugPrint(e.message);
+
           showCustomDialog(
             context: context,
             title: "Authentication Error",
