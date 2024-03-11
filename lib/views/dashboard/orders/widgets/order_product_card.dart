@@ -111,7 +111,7 @@ class OrderProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                "Rs. ${quantity * shopPrice}",
+                "Rs. $shopPrice",
                 style: GoogleFonts.poppins(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,

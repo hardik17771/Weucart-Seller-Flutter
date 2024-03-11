@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 
 class PastOrderCard extends StatefulWidget {
@@ -68,12 +67,21 @@ class _PastOrderCardState extends State<PastOrderCard> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       color: AppColors.blackColor,
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     widget.orderModel.customer_current_address.address,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      color: AppColors.blackColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    widget.orderModel.customer_current_address.city,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       color: AppColors.blackColor,

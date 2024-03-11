@@ -94,12 +94,21 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: AppColors.blackColor,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             widget.orderModel.customer_current_address.address,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.blackColor,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            widget.orderModel.customer_current_address.city,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: AppColors.blackColor,
@@ -349,7 +358,7 @@ class _LiveOrderCardState extends State<LiveOrderCard> {
                               const SizedBox(width: 8),
                             ],
                           )
-                        : (widget.orderModel.is_accepted == "decilned")
+                        : (widget.orderModel.is_accepted == "declined")
                             ? Container(
                                 decoration: BoxDecoration(
                                   color: AppColors.secondryButtonColor,
