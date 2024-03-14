@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 class MainCategoryModel {
@@ -9,7 +8,7 @@ class MainCategoryModel {
   final String icon;
   final String image;
   final int featured;
-  final int top;
+  final int? top;
   final List<String> subCategoryIdsList;
   final List<String> productIdsList;
   final String? id;
@@ -24,7 +23,7 @@ class MainCategoryModel {
     required this.icon,
     required this.image,
     required this.featured,
-    required this.top,
+    this.top,
     required this.subCategoryIdsList,
     required this.productIdsList,
     this.id,
@@ -59,7 +58,7 @@ class MainCategoryModel {
       icon: map['icon'] as String,
       image: map['image'] as String,
       featured: map['featured'] as int,
-      top: map['top'] as int,
+      top: map['top'] != null ? map['top'] as int : null,
       subCategoryIdsList:
           List<String>.from((map['subCategories'] as List<dynamic>)),
       productIdsList: List<String>.from((map['products'] as List<dynamic>)),

@@ -74,7 +74,7 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
             ),
           ),
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,28 +99,30 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                           }
                         },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 2.0, horizontal: 8),
                           child: Text(
                             "-",
                             style: GoogleFonts.poppins(
-                              fontSize: 10,
+                              fontSize: 11,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                             ),
                           ),
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 4),
                         decoration: const BoxDecoration(
                           color: Colors.white,
                         ),
                         child: Text(
                           widget.productModel.quantity.toString(),
                           style: GoogleFonts.poppins(
-                            fontSize: 10,
+                            fontSize: 11,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            color: AppColors.blackColor,
                           ),
                         ),
                       ),
@@ -132,13 +134,14 @@ class _QrScanProductCardState extends State<QrScanProductCard> {
                           widget.notifyParent;
                         },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 2.0, horizontal: 8),
                           child: Text(
                             "+",
                             style: GoogleFonts.poppins(
-                              fontSize: 10,
+                              fontSize: 11,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                             ),
                           ),
                         ),

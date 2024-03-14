@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:weu_cart_seller/controllers/dashboard/category_controller.dart';
 import 'package:weu_cart_seller/controllers/dashboard/product_controller.dart';
 import 'package:weu_cart_seller/controllers/file_upload_controller.dart';
@@ -58,6 +59,94 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _isLoading = false;
     _isProductAddedManually = false;
     _showProductFillingDetails = false;
+  }
+
+  void showImageDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Choose image source",
+            style: GoogleFonts.poppins(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              color: AppColors.blackColor,
+            ),
+          ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  File? pickedImage =
+                      await pickImage(imageSource: ImageSource.gallery);
+                  if (pickedImage != null) {
+                    setState(() {
+                      _productImage = pickedImage;
+                    });
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.photo,
+                      size: 20,
+                      color: AppColors.greyColor,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "Gallery",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primaryButtonColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  File? pickedImage =
+                      await pickImage(imageSource: ImageSource.camera);
+                  if (pickedImage != null) {
+                    _productImage = pickedImage;
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.add_a_photo_rounded,
+                      size: 20,
+                      color: AppColors.greyColor,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "Camera",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primaryButtonColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<String?> _startBarCodeScan() async {
@@ -788,13 +877,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                 ),
                                               )
                                             : GestureDetector(
-                                                onTap: () async {
-                                                  File? pickedImage =
-                                                      await pickImage();
-                                                  if (pickedImage != null) {
-                                                    _productImage = pickedImage;
-                                                  }
-                                                  setState(() {});
+                                                onTap: () {
+                                                  showImageDialog();
+                                                  ;
                                                 },
                                                 child: Container(
                                                   height: 108,
@@ -1343,13 +1428,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                 ),
                                               )
                                             : GestureDetector(
-                                                onTap: () async {
-                                                  File? pickedImage =
-                                                      await pickImage();
-                                                  if (pickedImage != null) {
-                                                    _productImage = pickedImage;
-                                                  }
-                                                  setState(() {});
+                                                onTap: () {
+                                                  showImageDialog();
                                                 },
                                                 child: Container(
                                                   height: 108,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,7 +7,6 @@ import 'package:weu_cart_seller/controllers/dashboard/order_controller.dart';
 import 'package:weu_cart_seller/controllers/seller_controller.dart';
 import 'package:weu_cart_seller/controllers/shop_controller.dart';
 import 'package:weu_cart_seller/core/colors.dart';
-import 'package:weu_cart_seller/core/constants.dart';
 import 'package:weu_cart_seller/models/order_model.dart';
 import 'package:weu_cart_seller/models/shop_model.dart';
 import 'package:weu_cart_seller/views/app_info/about_us_screen.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // late io.Socket socket;
+  late Timer timer;
   final SellerController _sellerController = SellerController();
   final ShopController _shopController = ShopController();
   final OrderController _orderController = OrderController();
@@ -35,38 +37,41 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    connectToSocket();
+    timer = Timer.periodic(const Duration(seconds: 5), ((timer) {
+      refresh();
+      debugPrint("Fetching live Orders");
+    }));
+    // connectToSocket();
   }
 
-  void connectToSocket() {
-    // socket = io.io(
-    //   AppConstants.backendUrl,
-    //   <String, dynamic>{
-    //     'transports': ['websocket'],
-    //     'autoConnect': true,
-    //   },
-    // );
-
-    // socket.connect();
-    // socket.onConnect((_) {
-    //   debugPrint('Connected to the socket server');
-    // });
-    // socket.onDisconnect((_) {
-    //   debugPrint('Disconnected from the socket server');
-    // });
-
-    // socket.on('orderPlaced', (data) {
-    //   debugPrint('Received order id: $data');
-    //   setState(() {
-    //     liveOrderIds.add(data);
-    //   });
-    // });
-  }
+  // void connectToSocket() {
+  //   socket = io.io(
+  //     AppConstants.backendUrl,
+  //     <String, dynamic>{
+  //       'transports': ['websocket'],
+  //       'autoConnect': true,
+  //     },
+  //   );
+  //   socket.connect();
+  //   socket.onConnect((_) {
+  //     debugPrint('Connected to the socket server');
+  //   });
+  //   socket.onDisconnect((_) {
+  //     debugPrint('Disconnected from the socket server');
+  //   });
+  //   socket.on('orderPlaced', (data) {
+  //     debugPrint('Received order id: $data');
+  //     setState(() {
+  //       liveOrderIds.add(data);
+  //     });
+  //   });
+  // }
 
   @override
   void dispose() {
     // socket.disconnect();
     // socket.dispose();
+    timer.cancel();
     super.dispose();
   }
 
@@ -88,8 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               ShopModel shopModel = snapshot.data!;
-              // debugPrint(liveOrderIds.toString());
-              debugPrint(shopModel.status.toString());
 
               return SingleChildScrollView(
                 child: Column(
@@ -228,7 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(
+                          Container(
+                            alignment: Alignment.topRight,
                             child: InkWell(
                               onTap: () {
                                 refresh();

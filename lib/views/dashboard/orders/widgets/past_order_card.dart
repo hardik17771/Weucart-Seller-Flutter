@@ -34,105 +34,113 @@ class _PastOrderCardState extends State<PastOrderCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 36,
-                width: 36,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.person,
-                  color: AppColors.greyColor,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "From",
-                    style: GoogleFonts.poppins(
-                      color: AppColors.primaryButtonColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
+          Flexible(
+            flex: 10,
+            child: Row(
+              children: [
+                Container(
+                  height: 36,
+                  width: 36,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
                   ),
-                  Text(
-                    widget.orderModel.customer_name,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      color: AppColors.blackColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    widget.orderModel.customer_current_address.address,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      color: AppColors.blackColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    widget.orderModel.customer_current_address.city,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      color: AppColors.blackColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 24),
-              Container(
-                padding: const EdgeInsets.only(left: 4, right: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: (widget.orderModel.status == "delivered")
-                      ? AppColors.greenColor
-                      : AppColors.redColor,
-                ),
-                child: Text(
-                  widget.orderModel.status,
-                  style: GoogleFonts.poppins(
-                    color: AppColors.whiteColor,
-                    fontSize: 8,
-                    fontWeight: FontWeight.w400,
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.person,
+                    color: AppColors.greyColor,
                   ),
                 ),
-              )
-            ],
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "From",
+                        style: GoogleFonts.poppins(
+                          color: AppColors.primaryButtonColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.orderModel.customer_name,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.blackColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.orderModel.customer_current_address.address,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.blackColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.orderModel.customer_current_address.city,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.blackColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "Total",
-                style: GoogleFonts.poppins(
-                  color: AppColors.primaryButtonColor,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
+          Flexible(
+            flex: 4,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "Total",
+                  style: GoogleFonts.poppins(
+                    color: AppColors.primaryButtonColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              Text(
-                "Rs ${widget.orderModel.total_amount}",
-                style: GoogleFonts.poppins(
-                  color: AppColors.blackColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                Text(
+                  "Rs ${widget.orderModel.total_amount}",
+                  style: GoogleFonts.poppins(
+                    color: AppColors.blackColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 6, right: 6, top: 2, bottom: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: (widget.orderModel.status == "delivered")
+                        ? AppColors.greenColor
+                        : AppColors.redColor,
+                  ),
+                  child: Text(
+                    widget.orderModel.status,
+                    style: GoogleFonts.poppins(
+                      color: AppColors.whiteColor,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),

@@ -6,10 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 
-void showCustomDialog(
-    {required BuildContext context,
-    required String title,
-    required String message}) {
+void showCustomDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+}) {
   showDialog(
     context: context,
     builder: (context) {
@@ -82,10 +83,12 @@ extension EmailValidator on String {
   }
 }
 
-Future<File?> pickImage() async {
+Future<File?> pickImage({
+  required ImageSource imageSource,
+}) async {
   File? pickerImage;
   try {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
       pickerImage = File(image.path);
     }

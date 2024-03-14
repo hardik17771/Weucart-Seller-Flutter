@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:weu_cart_seller/core/colors.dart';
 import 'package:weu_cart_seller/views/dashboard/pos_billing/qr_scanning_screen.dart';
@@ -25,14 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    // setUpTimedFetch();
     _pageIndex = widget.pageIndex;
-  }
-
-  setUpTimedFetch() {
-    Timer.periodic(const Duration(milliseconds: 3000), (timer) {
-      setState(() {});
-    });
   }
 
   @override

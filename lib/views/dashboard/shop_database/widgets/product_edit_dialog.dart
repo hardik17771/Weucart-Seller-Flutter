@@ -41,31 +41,31 @@ void showEditProductDialog({
           content: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Form(
                 key: _formKey,
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Row(
+                    Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Quantity:",
+                          "Quantity",
                           style: GoogleFonts.poppins(
-                            fontSize: 10,
+                            fontSize: 11,
                             fontWeight: FontWeight.w500,
                             color: AppColors.blackColor,
                           ),
                         ),
                         const SizedBox(width: 16),
                         SizedBox(
-                          width: 50,
+                          width: 80,
                           child: TextFormField(
                             controller: _quantityController,
                             validator: (value) {
@@ -89,13 +89,13 @@ void showEditProductDialog({
                         ),
                       ],
                     ),
-                    Row(
+                    Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Price:",
+                          "Price",
                           style: GoogleFonts.poppins(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -104,7 +104,7 @@ void showEditProductDialog({
                         ),
                         const SizedBox(width: 16),
                         SizedBox(
-                          width: 50,
+                          width: 80,
                           child: TextFormField(
                             controller: _priceController,
                             validator: (value) {
